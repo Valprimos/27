@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function AgendaScreen({ navigation }: Props) {
-  const { planItems, togglePlanItem, deletePlanItem } = useApp();
+  const { planItems, cyclePlanItemStatus, deletePlanItem } = useApp();
   const today = todayISODate();
 
   const sections = useMemo(() => {
@@ -26,7 +26,7 @@ export default function AgendaScreen({ navigation }: Props) {
     const dates = Array.from(byDate.keys()).sort();
     return dates.map((date) => ({
       title: date,
-      data: byDate.get(date)!.sort((a, b) => Number(a.completed) - Number(b.completed)),
+      data: byDate.get(date)!.sort((a, b) => Number(a.status === "done") - Number(b.status === "done")),
     }));
   }, [planItems]);
 
@@ -52,7 +52,12 @@ export default function AgendaScreen({ navigation }: Props) {
           </Text>
         )}
         renderItem={({ item }) => (
-          <PlanItemCard item={item} onToggle={() => togglePlanItem(item.id)} onDelete={() => deletePlanItem(item.id)} />
+          <PlanItemCard
+            item={item}
+            onPress={() => navigation.navigate("PlanItemForm", { date: item.date, planItemId: item.id })}
+            onCycleStatus={() => cyclePlanItemStatus(item.id)}
+            onDelete={() => deletePlanItem(item.id)}
+          />
         )}
         ListEmptyComponent={
           <View style={styles.emptyBox}>

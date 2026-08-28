@@ -2,7 +2,7 @@ export type RootStackParamList = {
   Main: undefined;
   Goals: undefined;
   GoalForm: { goalId?: string };
-  PlanItemForm: { date: string };
+  PlanItemForm: { date: string; planItemId?: string };
   ImportPlan: undefined;
   NoteForm: { noteId?: string };
 };

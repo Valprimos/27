@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { AppSettings, DailyEntry, Goal, ImportDocument, Note, PlanItem, WeekDay } from "@/types";
+import { AppSettings, DailyEntry, Goal, ImportDocument, Note, PlanItem, PlanItemStatus, WeekDay } from "@/types";
 import {
   loadEntries,
   loadGoals,
@@ -34,8 +34,10 @@ interface AppContextValue {
   setEntryForToday: (goalId: string, patch: Partial<DailyEntry>) => Promise<void>;
   getEntry: (goalId: string, date: string) => DailyEntry | undefined;
   updateSettings: (patch: Partial<AppSettings>) => Promise<void>;
-  addPlanItem: (item: Omit<PlanItem, "id" | "completed" | "source" | "updatedAt">) => Promise<void>;
-  togglePlanItem: (id: string) => Promise<void>;
+  addPlanItem: (item: Omit<PlanItem, "id" | "status" | "source" | "updatedAt">) => Promise<void>;
+  updatePlanItem: (item: PlanItem) => Promise<void>;
+  cyclePlanItemStatus: (id: string) => Promise<void>;
+  setPlanItemStatus: (id: string, status: PlanItemStatus) => Promise<void>;
   deletePlanItem: (id: string) => Promise<void>;
   addNote: (note: Omit<Note, "id" | "createdAt" | "updatedAt">) => Promise<Note>;
   updateNote: (note: Note) => Promise<void>;
@@ -134,12 +136,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }
 
   async function addPlanItem(
-    item: Omit<PlanItem, "id" | "completed" | "source" | "updatedAt">
+    item: Omit<PlanItem, "id" | "status" | "source" | "updatedAt">
   ): Promise<void> {
     const newItem: PlanItem = {
       ...item,
       id: uid(),
-      completed: false,
+      status: "pending",
       source: "manual",
       updatedAt: new Date().toISOString(),
     };
@@ -148,10 +150,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     await savePlanItems(next);
   }
 
-  async function togglePlanItem(id: string): Promise<void> {
-    const next = planItems.map((p) =>
-      p.id === id ? { ...p, completed: !p.completed, updatedAt: new Date().toISOString() } : p
-    );
+  async function updatePlanItem(item: PlanItem): Promise<void> {
+    const next = planItems.map((p) => (p.id === item.id ? { ...item, updatedAt: new Date().toISOString() } : p));
+    setPlanItems(next);
+    await savePlanItems(next);
+  }
+
+  const STATUS_CYCLE: PlanItemStatus[] = ["pending", "done", "partial"];
+
+  async function cyclePlanItemStatus(id: string): Promise<void> {
+    const next = planItems.map((p) => {
+      if (p.id !== id) return p;
+      const nextStatus = STATUS_CYCLE[(STATUS_CYCLE.indexOf(p.status) + 1) % STATUS_CYCLE.length];
+      return { ...p, status: nextStatus, updatedAt: new Date().toISOString() };
+    });
+    setPlanItems(next);
+    await savePlanItems(next);
+  }
+
+  async function setPlanItemStatus(id: string, status: PlanItemStatus): Promise<void> {
+    const next = planItems.map((p) => (p.id === id ? { ...p, status, updatedAt: new Date().toISOString() } : p));
     setPlanItems(next);
     await savePlanItems(next);
   }
@@ -231,7 +249,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           icon: p.icon ?? "🗓️",
           targetValue: p.targetValue,
           unit: p.unit,
-          completed: existingIdx >= 0 ? nextPlanItems[existingIdx].completed : p.completed ?? false,
+          status:
+            existingIdx >= 0
+              ? nextPlanItems[existingIdx].status
+              : p.status ?? (p.completed ? "done" : "pending"),
           source: "import",
           updatedAt: now,
         };
@@ -256,6 +277,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           tags: n.tags ?? [],
           date: n.date ?? todayISODate(),
           pinned: n.pinned ?? false,
+          examScore: n.examScore,
           createdAt: existingIdx >= 0 ? nextNotes[existingIdx].createdAt : now,
           updatedAt: now,
         };
@@ -291,7 +313,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       getEntry,
       updateSettings,
       addPlanItem,
-      togglePlanItem,
+      updatePlanItem,
+      cyclePlanItemStatus,
+      setPlanItemStatus,
       deletePlanItem,
       addNote,
       updateNote,

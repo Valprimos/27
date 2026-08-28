@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView, Pressable, Alert } from "react-native";
 import { useApp } from "@/context/AppContext";
-import { PlanCategory } from "@/types";
+import { PlanCategory, PlanItemStatus } from "@/types";
 import { GradientButton } from "@/components/GradientButton";
+import { confirmAsync } from "@/utils/confirm";
 import { categoryGradient, colors } from "@/theme";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
@@ -11,20 +12,30 @@ type Props = NativeStackScreenProps<RootStackParamList, "PlanItemForm">;
 
 const CATEGORIES: { key: PlanCategory; label: string; icon: string }[] = [
   { key: "entrenamiento", label: "Entrenamiento", icon: "🏋️" },
+  { key: "ingles", label: "Inglés", icon: "🇬🇧" },
   { key: "estudio", label: "Estudio", icon: "📚" },
   { key: "examen", label: "Examen", icon: "📝" },
   { key: "dinero", label: "Dinero", icon: "💰" },
   { key: "otro", label: "Otro", icon: "🗓️" },
 ];
 
+const STATUS_OPTIONS: { key: PlanItemStatus; label: string }[] = [
+  { key: "pending", label: "Pendiente" },
+  { key: "partial", label: "Parcial" },
+  { key: "done", label: "Completado" },
+];
+
 export default function PlanItemFormScreen({ route, navigation }: Props) {
-  const { addPlanItem } = useApp();
-  const [date, setDate] = useState(route.params?.date ?? "");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState<PlanCategory>("entrenamiento");
-  const [targetValue, setTargetValue] = useState("");
-  const [unit, setUnit] = useState("");
+  const { planItems, addPlanItem, updatePlanItem, deletePlanItem } = useApp();
+  const editing = route.params?.planItemId ? planItems.find((p) => p.id === route.params.planItemId) : undefined;
+
+  const [date, setDate] = useState(editing?.date ?? route.params?.date ?? "");
+  const [title, setTitle] = useState(editing?.title ?? "");
+  const [description, setDescription] = useState(editing?.description ?? "");
+  const [category, setCategory] = useState<PlanCategory>(editing?.category ?? "entrenamiento");
+  const [targetValue, setTargetValue] = useState(editing?.targetValue ? String(editing.targetValue) : "");
+  const [unit, setUnit] = useState(editing?.unit ?? "");
+  const [status, setStatus] = useState<PlanItemStatus>(editing?.status ?? "pending");
 
   async function handleSave() {
     if (!title.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -32,16 +43,39 @@ export default function PlanItemFormScreen({ route, navigation }: Props) {
       return;
     }
     const cat = CATEGORIES.find((c) => c.key === category)!;
-    await addPlanItem({
-      date,
-      title: title.trim(),
-      description: description || undefined,
-      category,
-      icon: cat.icon,
-      targetValue: targetValue ? Number(targetValue) : undefined,
-      unit: unit || undefined,
-    });
+    if (editing) {
+      await updatePlanItem({
+        ...editing,
+        date,
+        title: title.trim(),
+        description: description || undefined,
+        category,
+        icon: editing.icon || cat.icon,
+        targetValue: targetValue ? Number(targetValue) : undefined,
+        unit: unit || undefined,
+        status,
+      });
+    } else {
+      await addPlanItem({
+        date,
+        title: title.trim(),
+        description: description || undefined,
+        category,
+        icon: cat.icon,
+        targetValue: targetValue ? Number(targetValue) : undefined,
+        unit: unit || undefined,
+      });
+    }
     navigation.goBack();
+  }
+
+  async function handleDelete() {
+    if (!editing) return;
+    const ok = await confirmAsync("Eliminar tarea", `¿Eliminar "${editing.title}" del calendario?`);
+    if (ok) {
+      await deletePlanItem(editing.id);
+      navigation.goBack();
+    }
   }
 
   return (
@@ -108,12 +142,35 @@ export default function PlanItemFormScreen({ route, navigation }: Props) {
         placeholderTextColor={colors.textFaint}
       />
 
+      {editing && (
+        <>
+          <Text style={styles.label}>Estado</Text>
+          <View style={styles.wrapRow}>
+            {STATUS_OPTIONS.map((s) => (
+              <Pressable
+                key={s.key}
+                style={[styles.chip, status === s.key && styles.chipActive]}
+                onPress={() => setStatus(s.key)}
+              >
+                <Text style={styles.chipText}>{s.label}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </>
+      )}
+
       <GradientButton
-        label="Guardar en el calendario"
+        label={editing ? "Guardar cambios" : "Guardar en el calendario"}
         gradient={categoryGradient[category]}
         onPress={handleSave}
         style={{ marginTop: 26 }}
       />
+
+      {editing && (
+        <Pressable onPress={handleDelete} style={styles.deleteBtn}>
+          <Text style={styles.deleteText}>Eliminar tarea</Text>
+        </Pressable>
+      )}
     </ScrollView>
   );
 }
@@ -140,4 +197,6 @@ const styles = StyleSheet.create({
   },
   chipActive: { backgroundColor: "rgba(124,58,237,0.25)", borderColor: "#a855f7" },
   chipText: { color: colors.text, fontSize: 13 },
+  deleteBtn: { alignItems: "center", marginTop: 18 },
+  deleteText: { color: "#f87171", fontWeight: "600" },
 });

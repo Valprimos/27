@@ -18,6 +18,9 @@ export default function NoteFormScreen({ route, navigation }: Props) {
   const [date, setDate] = useState(editing?.date ?? todayISODate());
   const [tagsText, setTagsText] = useState(editing?.tags.join(", ") ?? "");
   const [pinned, setPinned] = useState(editing?.pinned ?? false);
+  const [isExam, setIsExam] = useState(!!editing?.examScore);
+  const [scoreCorrect, setScoreCorrect] = useState(editing?.examScore ? String(editing.examScore.correct) : "");
+  const [scoreTotal, setScoreTotal] = useState(editing?.examScore ? String(editing.examScore.total) : "");
 
   async function handleSave() {
     if (!title.trim()) {
@@ -29,10 +32,15 @@ export default function NoteFormScreen({ route, navigation }: Props) {
       .map((t) => t.trim())
       .filter(Boolean);
 
+    const examScore =
+      isExam && scoreCorrect && scoreTotal
+        ? { correct: Number(scoreCorrect), total: Number(scoreTotal) }
+        : undefined;
+
     if (editing) {
-      await updateNote({ ...editing, title: title.trim(), body, date, tags, pinned });
+      await updateNote({ ...editing, title: title.trim(), body, date, tags, pinned, examScore });
     } else {
-      await addNote({ title: title.trim(), body, date, tags, pinned });
+      await addNote({ title: title.trim(), body, date, tags, pinned, examScore });
     }
     navigation.goBack();
   }
@@ -62,9 +70,41 @@ export default function NoteFormScreen({ route, navigation }: Props) {
         style={styles.input}
         value={tagsText}
         onChangeText={setTagsText}
-        placeholder="examen, cálculo"
+        placeholder="examen, inglés"
         placeholderTextColor={colors.textFaint}
       />
+
+      <Pressable style={styles.pinRow} onPress={() => setIsExam((v) => !v)}>
+        <View style={[styles.checkbox, isExam && styles.checkboxOn]}>{isExam && <Text>🎯</Text>}</View>
+        <Text style={styles.pinLabel}>Es un examen — guardar puntuación (para el progreso de inglés)</Text>
+      </Pressable>
+
+      {isExam && (
+        <View style={styles.row}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.label}>Aciertos</Text>
+            <TextInput
+              style={styles.input}
+              value={scoreCorrect}
+              onChangeText={setScoreCorrect}
+              keyboardType="numeric"
+              placeholder="42"
+              placeholderTextColor={colors.textFaint}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.label}>Sobre un total de</Text>
+            <TextInput
+              style={styles.input}
+              value={scoreTotal}
+              onChangeText={setScoreTotal}
+              keyboardType="numeric"
+              placeholder="50"
+              placeholderTextColor={colors.textFaint}
+            />
+          </View>
+        </View>
+      )}
 
       <Text style={styles.label}>Contenido</Text>
       <TextInput
@@ -103,6 +143,7 @@ const styles = StyleSheet.create({
     borderColor: colors.cardBorder,
     textAlignVertical: "top",
   },
+  row: { flexDirection: "row", gap: 10 },
   pinRow: { flexDirection: "row", alignItems: "center", gap: 10, marginTop: 20 },
   checkbox: {
     width: 26,
@@ -114,5 +155,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   checkboxOn: { backgroundColor: "rgba(236,72,153,0.25)", borderColor: "#ec4899" },
-  pinLabel: { color: colors.text, fontWeight: "600" },
+  pinLabel: { color: colors.text, fontWeight: "600", flexShrink: 1 },
 });

@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function HomeScreen({ navigation }: Props) {
-  const { goals, entries, getEntry, setEntryForToday, planItems, togglePlanItem, deletePlanItem, settings } =
+  const { goals, entries, getEntry, setEntryForToday, planItems, cyclePlanItemStatus, deletePlanItem, settings } =
     useApp();
 
   const today = todayISODate();
@@ -23,14 +23,18 @@ export default function HomeScreen({ navigation }: Props) {
     [goals, today]
   );
   const todaysPlanItems = useMemo(
-    () => planItems.filter((p) => p.date === today).sort((a, b) => Number(a.completed) - Number(b.completed)),
+    () =>
+      planItems
+        .filter((p) => p.date === today)
+        .sort((a, b) => Number(a.status === "done") - Number(b.status === "done")),
     [planItems, today]
   );
 
   const totalTasks = todaysGoals.length + todaysPlanItems.length;
   const doneTasks =
     todaysGoals.filter((g) => getEntry(g.id, today)?.completed).length +
-    todaysPlanItems.filter((p) => p.completed).length;
+    todaysPlanItems.filter((p) => p.status === "done").length;
+  const partialTasks = todaysPlanItems.filter((p) => p.status === "partial").length;
 
   return (
     <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 40 }}>
@@ -38,6 +42,7 @@ export default function HomeScreen({ navigation }: Props) {
       <Text style={styles.greeting}>{settings.userName ? `Hola, ${settings.userName} 👋` : "Hoy"}</Text>
       <Text style={styles.headerText}>
         {doneTasks}/{totalTasks || 0} completados hoy
+        {partialTasks > 0 ? ` (+${partialTasks} parcial${partialTasks > 1 ? "es" : ""})` : ""}
       </Text>
 
       <View style={styles.quickRow}>
@@ -68,7 +73,8 @@ export default function HomeScreen({ navigation }: Props) {
         <PlanItemCard
           key={item.id}
           item={item}
-          onToggle={() => togglePlanItem(item.id)}
+          onPress={() => navigation.navigate("PlanItemForm", { date: item.date, planItemId: item.id })}
+          onCycleStatus={() => cyclePlanItemStatus(item.id)}
           onDelete={() => deletePlanItem(item.id)}
         />
       ))}

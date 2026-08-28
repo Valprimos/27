@@ -11,9 +11,13 @@ dispositivo** (sin backend, sin cuentas, sin IA de pago).
   recurrentes — con botones rápidos para marcarlas hechas o saltadas.
 - **Calendario**: agenda con todas tus tareas con fecha (entrenamientos futuros,
   exámenes, lo que sea), agrupadas por día. No son hábitos que se repiten solos:
-  cada una vive en su fecha, tal y como la hayas planeado.
+  cada una vive en su fecha, tal y como la hayas planeado. Cada tarea admite tres
+  estados (pendiente / parcial / completada) y se puede pulsar para verla entera
+  y editarla.
 - **Notas**: un cuaderno libre para apuntes de exámenes, ideas o lo que quieras,
-  con etiquetas y buscador.
+  con etiquetas y buscador. Las notas marcadas como examen guardan una
+  puntuación y alimentan un apartado de **progreso en inglés** con la evolución
+  de tus notas a lo largo del tiempo.
 - **Objetivos recurrentes** (opcional, desde Ajustes): hábitos, metas numéricas
   diarias o ahorro, con racha y % de cumplimiento.
 - **Estadísticas**: racha actual, mejor racha histórica, días completados/saltados,
@@ -53,14 +57,22 @@ Formato del documento (todos los campos excepto `version` son opcionales):
       "icon": "🏋️",
       "targetValue": 60,
       "unit": "minutos"
+    },
+    {
+      "date": "2026-05-10",
+      "title": "British Council - C1",
+      "category": "ingles",
+      "icon": "🇬🇧",
+      "status": "done"
     }
   ],
   "notes": [
     {
-      "title": "Examen Cálculo II",
-      "body": "Temas: derivadas, integrales, series.",
-      "tags": ["examen", "cálculo"],
-      "date": "2026-05-10"
+      "title": "Examen Cambridge C1",
+      "body": "Repasar listening y writing.",
+      "tags": ["examen", "inglés"],
+      "date": "2026-05-10",
+      "examScore": { "correct": 42, "total": 50 }
     }
   ],
   "goals": [
@@ -69,7 +81,13 @@ Formato del documento (todos los campos excepto `version` son opcionales):
 }
 ```
 
-- `category` de `planItems`: `entrenamiento` | `estudio` | `dinero` | `examen` | `otro`.
+- `category` de `planItems`: `entrenamiento` | `ingles` | `estudio` | `dinero` | `examen` | `otro`.
+- `status` de `planItems`: `pending` | `done` | `partial` (por defecto `pending`; en
+  las tareas nuevas se puede forzar `done` para marcar algo ya hecho, como un
+  test pasado).
+- `examScore` en `notes` (opcional): `{ "correct": N, "total": M }`. Las notas
+  con esta puntuación y una etiqueta que contenga "ingl" alimentan la sección
+  **Progreso en inglés** dentro de Notas.
 - `kind` de `goals`: `habit` | `numeric` | `money`.
 - Volver a importar un `planItem`/`nota`/`goal` con el mismo `id` lo actualiza en
   vez de duplicarlo.

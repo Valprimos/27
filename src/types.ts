@@ -40,7 +40,9 @@ export interface DailyEntry {
 // Tarea puntual anclada a una fecha concreta del calendario (ej. "17 de mayo:
 // entrenamiento de piernas", "20 de mayo: examen de Cálculo"). No se repite
 // solo ni se convierte en un hábito semanal: vive únicamente ese día.
-export type PlanCategory = "entrenamiento" | "estudio" | "dinero" | "examen" | "otro";
+export type PlanCategory = "entrenamiento" | "ingles" | "estudio" | "dinero" | "examen" | "otro";
+
+export type PlanItemStatus = "pending" | "done" | "partial";
 
 export interface PlanItem {
   id: string;
@@ -51,9 +53,14 @@ export interface PlanItem {
   icon: string;
   targetValue?: number;
   unit?: string;
-  completed: boolean;
+  status: PlanItemStatus;
   source: "manual" | "import";
   updatedAt: string;
+}
+
+export interface ExamScore {
+  correct: number;
+  total: number;
 }
 
 export interface Note {
@@ -63,6 +70,7 @@ export interface Note {
   tags: string[];
   date: string; // YYYY-MM-DD, fecha de referencia (ej. fecha del examen)
   pinned: boolean;
+  examScore?: ExamScore;
   createdAt: string;
   updatedAt: string;
 }
@@ -82,6 +90,8 @@ export interface ImportDocument {
     icon?: string;
     targetValue?: number;
     unit?: string;
+    status?: PlanItemStatus;
+    /** @deprecated usa "status" ("done" | "partial" | "pending") */
     completed?: boolean;
   }>;
   notes?: Array<{
@@ -91,6 +101,7 @@ export interface ImportDocument {
     tags?: string[];
     date?: string;
     pinned?: boolean;
+    examScore?: ExamScore;
   }>;
   goals?: Array<{
     id?: string;

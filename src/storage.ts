@@ -22,7 +22,13 @@ export const saveGoals = (goals: Goal[]) => saveJSON(GOALS_KEY, goals);
 export const loadEntries = () => loadJSON<DailyEntry[]>(ENTRIES_KEY, []);
 export const saveEntries = (entries: DailyEntry[]) => saveJSON(ENTRIES_KEY, entries);
 
-export const loadPlanItems = () => loadJSON<PlanItem[]>(PLAN_ITEMS_KEY, []);
+export async function loadPlanItems(): Promise<PlanItem[]> {
+  const items = await loadJSON<any[]>(PLAN_ITEMS_KEY, []);
+  // Migra el antiguo campo booleano `completed` al nuevo `status` tri-estado.
+  return items.map((item) =>
+    item.status ? item : { ...item, status: item.completed ? "done" : "pending" }
+  );
+}
 export const savePlanItems = (items: PlanItem[]) => saveJSON(PLAN_ITEMS_KEY, items);
 
 export const loadNotes = () => loadJSON<Note[]>(NOTES_KEY, []);

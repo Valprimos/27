@@ -2,43 +2,65 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { PlanItem } from "@/types";
 import { GlassCard } from "./GlassCard";
-import { categoryGradient, colors } from "@/theme";
+import { CATEGORY_LABEL, categoryGradient, colors } from "@/theme";
+import { confirmAsync } from "@/utils/confirm";
 
 interface Props {
   item: PlanItem;
-  onToggle: () => void;
+  onPress: () => void;
+  onCycleStatus: () => void;
   onDelete: () => void;
 }
 
-const CATEGORY_LABEL: Record<string, string> = {
-  entrenamiento: "Entrenamiento",
-  estudio: "Estudio",
-  dinero: "Dinero",
-  examen: "Examen",
-  otro: "Otro",
+const STATUS_META = {
+  pending: { icon: "", label: "" },
+  done: { icon: "✓", label: "Completado" },
+  partial: { icon: "½", label: "Parcial" },
 };
 
-export const PlanItemCard: React.FC<Props> = ({ item, onToggle, onDelete }) => {
+export const PlanItemCard: React.FC<Props> = ({ item, onPress, onCycleStatus, onDelete }) => {
   const gradient = categoryGradient[item.category] ?? categoryGradient.otro;
+  const status = STATUS_META[item.status];
+
+  async function handleDelete() {
+    const ok = await confirmAsync("Eliminar tarea", `¿Eliminar "${item.title}" del calendario?`);
+    if (ok) onDelete();
+  }
+
   return (
-    <GlassCard accentGradient={gradient} style={[styles.card, item.completed && styles.cardDone]}>
-      <Pressable onPress={onToggle} style={styles.row}>
+    <GlassCard accentGradient={gradient} style={[styles.card, item.status === "done" && styles.cardDone]}>
+      <Pressable onPress={onPress} style={styles.row}>
         <View style={styles.iconCircle}>
           <Text style={{ fontSize: 20 }}>{item.icon}</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={[styles.title, item.completed && styles.titleDone]}>{item.title}</Text>
+          <Text style={[styles.title, item.status === "done" && styles.titleDone]}>{item.title}</Text>
           <Text style={styles.meta}>
             {CATEGORY_LABEL[item.category] ?? "Otro"}
             {item.targetValue ? ` · ${item.targetValue} ${item.unit ?? ""}` : ""}
+            {item.status === "partial" ? " · Parcial" : ""}
           </Text>
-          {!!item.description && <Text style={styles.description}>{item.description}</Text>}
+          {!!item.description && (
+            <Text style={styles.description} numberOfLines={2}>
+              {item.description}
+            </Text>
+          )}
         </View>
-        <View style={[styles.checkbox, item.completed && styles.checkboxDone]}>
-          {item.completed && <Text style={styles.checkmark}>✓</Text>}
-        </View>
+        <Pressable
+          onPress={(e) => {
+            e.stopPropagation();
+            onCycleStatus();
+          }}
+          style={[
+            styles.checkbox,
+            item.status === "done" && styles.checkboxDone,
+            item.status === "partial" && styles.checkboxPartial,
+          ]}
+        >
+          <Text style={styles.checkmark}>{status.icon}</Text>
+        </Pressable>
       </Pressable>
-      <Pressable onPress={onDelete} style={styles.deleteBtn}>
+      <Pressable onPress={handleDelete} style={styles.deleteBtn}>
         <Text style={styles.deleteText}>Eliminar</Text>
       </Pressable>
     </GlassCard>
@@ -47,7 +69,7 @@ export const PlanItemCard: React.FC<Props> = ({ item, onToggle, onDelete }) => {
 
 const styles = StyleSheet.create({
   card: { marginBottom: 10, gap: 4 },
-  cardDone: { opacity: 0.55 },
+  cardDone: { opacity: 0.6 },
   row: { flexDirection: "row", alignItems: "center", gap: 12 },
   iconCircle: {
     width: 40,
@@ -62,15 +84,16 @@ const styles = StyleSheet.create({
   meta: { color: colors.textDim, fontSize: 12, marginTop: 2 },
   description: { color: colors.textFaint, fontSize: 12, marginTop: 4 },
   checkbox: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     borderWidth: 2,
     borderColor: colors.cardBorderStrong,
     alignItems: "center",
     justifyContent: "center",
   },
   checkboxDone: { backgroundColor: "#34d399", borderColor: "#34d399" },
+  checkboxPartial: { backgroundColor: "#fbbf24", borderColor: "#fbbf24" },
   checkmark: { color: "#04140c", fontWeight: "800" },
   deleteBtn: { alignSelf: "flex-end", marginTop: 6 },
   deleteText: { color: colors.textFaint, fontSize: 11 },

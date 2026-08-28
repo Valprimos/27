@@ -28,10 +28,20 @@ export const gradients = {
 
 export const categoryGradient: Record<string, readonly [string, string]> = {
   entrenamiento: gradients.orange,
+  ingles: gradients.cyan,
   estudio: gradients.blue,
   dinero: gradients.money,
   examen: gradients.pink,
   otro: gradients.purple,
+};
+
+export const CATEGORY_LABEL: Record<string, string> = {
+  entrenamiento: "Entrenamiento",
+  ingles: "Inglés",
+  estudio: "Estudio",
+  dinero: "Dinero",
+  examen: "Examen",
+  otro: "Otro",
 };
 
 export const radius = {

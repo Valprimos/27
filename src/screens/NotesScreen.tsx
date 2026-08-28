@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, TextInput, Pressable, Alert } from "react-native";
+import React, { useMemo, useState } from "react";
+import { View, Text, StyleSheet, FlatList, TextInput, Pressable } from "react-native";
 import { useApp } from "@/context/AppContext";
 import { GlassCard } from "@/components/GlassCard";
 import { GradientButton } from "@/components/GradientButton";
 import { colors, gradients } from "@/theme";
 import { formatFriendlyDate } from "@/utils/dates";
+import { confirmAsync } from "@/utils/confirm";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
 
@@ -15,6 +16,14 @@ interface Props {
 export default function NotesScreen({ navigation }: Props) {
   const { notes, deleteNote } = useApp();
   const [query, setQuery] = useState("");
+
+  const englishExams = useMemo(
+    () =>
+      notes
+        .filter((n) => n.examScore && n.tags.some((t) => t.toLowerCase().includes("ingl")))
+        .sort((a, b) => a.date.localeCompare(b.date)),
+    [notes]
+  );
 
   const filtered = notes.filter((n) => {
     const q = query.trim().toLowerCase();
@@ -51,10 +60,38 @@ export default function NotesScreen({ navigation }: Props) {
         contentContainerStyle={{ padding: 18, paddingTop: 10, paddingBottom: 60 }}
         data={sorted}
         keyExtractor={(n) => n.id}
+        ListHeaderComponent={
+          englishExams.length > 0 ? (
+            <GlassCard accentGradient={gradients.cyan} style={styles.progressCard}>
+              <Text style={styles.progressTitle}>🇬🇧 Progreso en inglés</Text>
+              {englishExams.map((exam, idx) => {
+                const pct = Math.round((exam.examScore!.correct / exam.examScore!.total) * 100);
+                const prev = englishExams[idx - 1];
+                const prevPct = prev ? Math.round((prev.examScore!.correct / prev.examScore!.total) * 100) : null;
+                const trend = prevPct === null ? "" : pct > prevPct ? " ▲" : pct < prevPct ? " ▼" : " =";
+                return (
+                  <View key={exam.id} style={styles.progressRow}>
+                    <Text style={styles.progressDate}>{formatFriendlyDate(exam.date)}</Text>
+                    <Text style={styles.progressName} numberOfLines={1}>
+                      {exam.title}
+                    </Text>
+                    <Text style={styles.progressScore}>
+                      {exam.examScore!.correct}/{exam.examScore!.total} · {pct}%
+                      <Text style={pct >= (prevPct ?? 0) ? styles.trendUp : styles.trendDown}>{trend}</Text>
+                    </Text>
+                  </View>
+                );
+              })}
+            </GlassCard>
+          ) : null
+        }
         ListEmptyComponent={
           <View style={styles.emptyBox}>
             <Text style={styles.emptyText}>Aún no tienes notas.</Text>
-            <Text style={styles.emptyHint}>Guarda aquí apuntes de exámenes, ideas o lo que quieras recordar.</Text>
+            <Text style={styles.emptyHint}>
+              Guarda aquí apuntes de exámenes, ideas o lo que quieras recordar. Marca una nota como examen para
+              seguir tu progreso en inglés.
+            </Text>
           </View>
         }
         renderItem={({ item }) => (
@@ -66,6 +103,12 @@ export default function NotesScreen({ navigation }: Props) {
                   {item.title}
                 </Text>
               </View>
+              {item.examScore && (
+                <Text style={styles.scoreBadge}>
+                  🎯 {item.examScore.correct}/{item.examScore.total} (
+                  {Math.round((item.examScore.correct / item.examScore.total) * 100)}%)
+                </Text>
+              )}
               <Text style={styles.body} numberOfLines={3}>
                 {item.body}
               </Text>
@@ -80,13 +123,13 @@ export default function NotesScreen({ navigation }: Props) {
                 </View>
               </View>
               <Pressable
-                onPress={() =>
-                  Alert.alert("Eliminar nota", `¿Eliminar "${item.title}"?`, [
-                    { text: "Cancelar", style: "cancel" },
-                    { text: "Eliminar", style: "destructive", onPress: () => deleteNote(item.id) },
-                  ])
-                }
+                onPress={async (e) => {
+                  e.stopPropagation();
+                  const ok = await confirmAsync("Eliminar nota", `¿Eliminar "${item.title}"?`);
+                  if (ok) deleteNote(item.id);
+                }}
                 style={styles.deleteBtn}
+                hitSlop={10}
               >
                 <Text style={styles.deleteText}>Eliminar</Text>
               </Pressable>
@@ -119,9 +162,18 @@ const styles = StyleSheet.create({
     borderColor: colors.cardBorder,
     fontSize: 13,
   },
+  progressCard: { marginBottom: 16, gap: 8 },
+  progressTitle: { color: colors.text, fontWeight: "700", fontSize: 15, marginBottom: 4 },
+  progressRow: { flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 4 },
+  progressDate: { color: colors.textFaint, fontSize: 11, width: 60, textTransform: "capitalize" },
+  progressName: { color: colors.textDim, fontSize: 12, flex: 1 },
+  progressScore: { color: colors.text, fontWeight: "700", fontSize: 12 },
+  trendUp: { color: "#34d399" },
+  trendDown: { color: "#f87171" },
   card: { marginBottom: 12, gap: 6 },
   cardHeader: { flexDirection: "row", alignItems: "center" },
   title: { color: colors.text, fontWeight: "700", fontSize: 16, flexShrink: 1 },
+  scoreBadge: { color: "#67e8f9", fontWeight: "700", fontSize: 12 },
   body: { color: colors.textDim, fontSize: 13, lineHeight: 18 },
   footerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 4 },
   date: { color: colors.textFaint, fontSize: 11, textTransform: "capitalize" },

@@ -1,10 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList, Pressable, Alert } from "react-native";
+import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { useApp } from "@/context/AppContext";
 import { GlassCard } from "@/components/GlassCard";
 import { GradientButton } from "@/components/GradientButton";
 import { colors, gradients } from "@/theme";
 import { goalGradient } from "@/utils/color";
+import { confirmAsync } from "@/utils/confirm";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
 
@@ -44,13 +45,13 @@ export default function GoalsScreen({ navigation }: Props) {
                   </Text>
                 </View>
                 <Pressable
-                  onPress={() =>
-                    Alert.alert("Eliminar objetivo", `¿Seguro que quieres eliminar "${item.name}"?`, [
-                      { text: "Cancelar", style: "cancel" },
-                      { text: "Eliminar", style: "destructive", onPress: () => deleteGoal(item.id) },
-                    ])
-                  }
+                  onPress={async (e) => {
+                    e.stopPropagation();
+                    const ok = await confirmAsync("Eliminar objetivo", `¿Seguro que quieres eliminar "${item.name}"?`);
+                    if (ok) deleteGoal(item.id);
+                  }}
                   style={styles.deleteBtn}
+                  hitSlop={10}
                 >
                   <Text style={styles.deleteText}>🗑️</Text>
                 </Pressable>

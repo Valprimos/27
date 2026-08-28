@@ -14,11 +14,14 @@ const EXAMPLE = `{
   "version": 1,
   "planItems": [
     { "date": "2026-05-17", "title": "Entrenamiento de piernas",
-      "category": "entrenamiento", "icon": "🏋️", "targetValue": 60, "unit": "minutos" }
+      "category": "entrenamiento", "icon": "🏋️", "targetValue": 60, "unit": "minutos" },
+    { "date": "2026-05-10", "title": "British Council - C1",
+      "category": "ingles", "icon": "🇬🇧", "status": "done" }
   ],
   "notes": [
-    { "title": "Examen Cálculo II", "body": "Repasar derivadas e integrales.",
-      "tags": ["examen"], "date": "2026-05-10" }
+    { "title": "Examen Cambridge C1", "body": "Repasar listening y writing.",
+      "tags": ["examen", "inglés"], "date": "2026-05-10",
+      "examScore": { "correct": 42, "total": 50 } }
   ]
 }`;
 
