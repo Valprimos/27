@@ -32,9 +32,10 @@ export default function StatsScreen({ navigation }: Props) {
         const failed = items.filter((p) => effectiveStatus(p, today) === "failed").length;
         const missed = items.filter((p) => effectiveStatus(p, today) === "missed").length;
         const resolved = done + failed + missed;
-        // "failed" no es un cero: es que lo hiciste pero sin llegar al
-        // objetivo, así que cuenta con crédito parcial.
-        const score = resolved > 0 ? (done + failed * 0.5) / resolved : 0;
+        // "failed" cuenta como hecho: lo hiciste, solo que sin llegar al
+        // objetivo marcado. Eso no es culpa tuya y no resta. Lo único que
+        // baja el % es no haberlo hecho ese día ("missed").
+        const score = resolved > 0 ? (done + failed) / resolved : 0;
         return { cat, total: items.length, done, failed, missed, score };
       })
       .sort((a, b) => b.total - a.total);
@@ -65,7 +66,7 @@ export default function StatsScreen({ navigation }: Props) {
             </View>
             <ProgressBar value={score} gradient={categoryGradient[cat] ?? categoryGradient.otro} />
             <Text style={styles.categoryBreakdown}>
-              ✅ {done} al objetivo · 🟡 {failed} sin llegar · – {missed} perdidas · {total} en total
+              ✅ {done} al objetivo · 🟡 {failed} hecho, sin llegar · – {missed} perdidas · {total} en total
             </Text>
           </GlassCard>
         </Pressable>

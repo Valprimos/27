@@ -27,8 +27,9 @@ export default function CategoryStatsScreen({ route, navigation }: Props) {
   const failed = resolved.filter((i) => effectiveStatus(i) === "failed").length;
   const missed = resolved.filter((i) => effectiveStatus(i) === "missed").length;
   const upcoming = items.length - resolved.length;
-  // "failed" = lo hiciste pero sin llegar al objetivo, no es un cero.
-  const score = resolved.length > 0 ? (done + failed * 0.5) / resolved.length : 0;
+  // "failed" cuenta como hecho (lo hiciste, sin llegar al objetivo marcado):
+  // no resta nada. Solo "missed" (no lo hiciste ese día) baja el %.
+  const score = resolved.length > 0 ? (done + failed) / resolved.length : 0;
 
   const byMonth = useMemo(() => {
     const map = new Map<string, { done: number; failed: number; missed: number; total: number }>();
@@ -97,11 +98,11 @@ export default function CategoryStatsScreen({ route, navigation }: Props) {
             <GlassCard key={month} accentGradient={gradient} style={styles.monthCard}>
               <View style={styles.monthHeaderRow}>
                 <Text style={styles.monthLabel}>{month}</Text>
-                <Text style={styles.monthScore}>{Math.round(((m.done + m.failed * 0.5) / m.total) * 100)}%</Text>
+                <Text style={styles.monthScore}>{Math.round(((m.done + m.failed) / m.total) * 100)}%</Text>
               </View>
-              <ProgressBar value={(m.done + m.failed * 0.5) / m.total} gradient={gradient} />
+              <ProgressBar value={(m.done + m.failed) / m.total} gradient={gradient} />
               <Text style={styles.monthBreakdown}>
-                ✅ {m.done} al objetivo · 🟡 {m.failed} sin llegar · – {m.missed} perdidas · {m.total} en total
+                ✅ {m.done} al objetivo · 🟡 {m.failed} hecho, sin llegar · – {m.missed} perdidas · {m.total} en total
               </Text>
             </GlassCard>
           ))}

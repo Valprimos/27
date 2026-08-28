@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList, MainTabKey } from "./types";
 import HomeScreen from "@/screens/HomeScreen";
@@ -24,9 +25,10 @@ interface Props {
 
 export default function MainTabs({ navigation }: Props) {
   const [tab, setTab] = useState<MainTabKey>("home");
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingTop: insets.top }}>
       <View style={{ flex: 1 }}>
         {tab === "home" && <HomeScreen navigation={navigation} />}
         {tab === "agenda" && <AgendaScreen navigation={navigation} />}
@@ -36,7 +38,7 @@ export default function MainTabs({ navigation }: Props) {
       </View>
       <View style={styles.tabBarWrapper}>
         <LinearGradient colors={gradients.header} style={StyleSheet.absoluteFill} />
-        <View style={styles.tabBar}>
+        <View style={[styles.tabBar, { paddingBottom: 10 + insets.bottom }]}>
           {TABS.map((t) => {
             const active = tab === t.key;
             const accent = tabGradient[t.key][1];
@@ -61,7 +63,6 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    paddingBottom: 20,
     paddingTop: 10,
   },
   tabItem: { flex: 1, alignItems: "center", gap: 3 },
