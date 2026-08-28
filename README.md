@@ -11,17 +11,22 @@ dispositivo** (sin backend, sin cuentas, sin IA de pago).
   recurrentes — con botones rápidos para marcarlas hechas o saltadas.
 - **Calendario**: agenda con todas tus tareas con fecha (entrenamientos futuros,
   exámenes, lo que sea), agrupadas por día. No son hábitos que se repiten solos:
-  cada una vive en su fecha, tal y como la hayas planeado. Cada tarea admite tres
-  estados (pendiente / parcial / completada) y se puede pulsar para verla entera
-  y editarla.
+  cada una vive en su fecha, tal y como la hayas planeado. El círculo de la
+  tarjeta marca directamente si la hiciste bien, si la intentaste sin
+  conseguirlo, o la deja sin marcar (si pasa el día sin marcarla, cuenta como
+  perdida en las estadísticas); tocar la tarjeta abre su ficha completa para
+  ver el detalle, cambiar el estado con más calma, editarla o borrarla.
 - **Notas**: un cuaderno libre para apuntes de exámenes, ideas o lo que quieras,
-  con etiquetas y buscador. Las notas marcadas como examen guardan una
-  puntuación y alimentan un apartado de **progreso en inglés** con la evolución
-  de tus notas a lo largo del tiempo.
+  con etiquetas, buscador y filtros por área — **Inglés**, **Instituto**
+  (con sus propias asignaturas) u **Otro**. Las notas marcadas como examen
+  guardan una puntuación y alimentan un apartado de **progreso** (en inglés,
+  o por asignatura) con la evolución de tus notas a lo largo del tiempo.
 - **Objetivos recurrentes** (opcional, desde Ajustes): hábitos, metas numéricas
   diarias o ahorro, con racha y % de cumplimiento.
-- **Estadísticas**: racha actual, mejor racha histórica, días completados/saltados,
-  progreso acumulado y vista semanal por objetivo.
+- **Estadísticas**: resumen general y, tocando cualquier categoría del
+  calendario o cualquier objetivo recurrente, una ficha con estadísticas
+  mucho más completas de esa temática (desglose mensual, historial completo,
+  progreso de exámenes si aplica, etc.).
 - **Importar plan**: en vez de pagar por una IA conectada, hablas con Claude en la
   conversación, te da un documento (JSON) con tu plan y lo pegas en la app. Se
   procesa 100% offline y sin coste.
@@ -70,9 +75,18 @@ Formato del documento (todos los campos excepto `version` son opcionales):
     {
       "title": "Examen Cambridge C1",
       "body": "Repasar listening y writing.",
-      "tags": ["examen", "inglés"],
+      "area": "ingles",
+      "tags": ["examen"],
       "date": "2026-05-10",
       "examScore": { "correct": 42, "total": 50 }
+    },
+    {
+      "title": "Examen de Física",
+      "body": "Cinemática y dinámica.",
+      "area": "instituto",
+      "subject": "Física",
+      "date": "2026-05-12",
+      "examScore": { "correct": 7, "total": 10 }
     }
   ],
   "goals": [
@@ -82,12 +96,14 @@ Formato del documento (todos los campos excepto `version` son opcionales):
 ```
 
 - `category` de `planItems`: `entrenamiento` | `ingles` | `estudio` | `dinero` | `examen` | `otro`.
-- `status` de `planItems`: `pending` | `done` | `partial` (por defecto `pending`; en
-  las tareas nuevas se puede forzar `done` para marcar algo ya hecho, como un
-  test pasado).
-- `examScore` en `notes` (opcional): `{ "correct": N, "total": M }`. Las notas
-  con esta puntuación y una etiqueta que contenga "ingl" alimentan la sección
-  **Progreso en inglés** dentro de Notas.
+- `status` de `planItems`: `pending` | `done` | `failed` (por defecto `pending`;
+  `done` = lo hiciste bien, `failed` = lo intentaste pero no lo conseguiste). Si
+  la fecha ya pasó y sigue en `pending`, la app la cuenta como perdida en las
+  estadísticas — no hace falta marcarla como tal.
+- `area` de `notes`: `ingles` | `instituto` | `otro`. Si `area` es `instituto`,
+  `subject` indica la asignatura (texto libre, ej. "Matemáticas").
+- `examScore` en `notes` (opcional): `{ "correct": N, "total": M }`. Alimenta
+  el panel de progreso de Notas para esa área/asignatura.
 - `kind` de `goals`: `habit` | `numeric` | `money`.
 - Volver a importar un `planItem`/`nota`/`goal` con el mismo `id` lo actualiza en
   vez de duplicarlo.

@@ -24,14 +24,20 @@ export const saveEntries = (entries: DailyEntry[]) => saveJSON(ENTRIES_KEY, entr
 
 export async function loadPlanItems(): Promise<PlanItem[]> {
   const items = await loadJSON<any[]>(PLAN_ITEMS_KEY, []);
-  // Migra el antiguo campo booleano `completed` al nuevo `status` tri-estado.
-  return items.map((item) =>
-    item.status ? item : { ...item, status: item.completed ? "done" : "pending" }
-  );
+  return items.map((item) => {
+    // Migra el antiguo campo booleano `completed` al `status`.
+    let status = item.status ?? (item.completed ? "done" : "pending");
+    // Migra el antiguo estado "partial" (renombrado a "failed").
+    if (status === "partial") status = "failed";
+    return { ...item, status };
+  });
 }
 export const savePlanItems = (items: PlanItem[]) => saveJSON(PLAN_ITEMS_KEY, items);
 
-export const loadNotes = () => loadJSON<Note[]>(NOTES_KEY, []);
+export async function loadNotes(): Promise<Note[]> {
+  const notes = await loadJSON<any[]>(NOTES_KEY, []);
+  return notes.map((n) => ({ area: "otro", ...n }));
+}
 export const saveNotes = (notes: Note[]) => saveJSON(NOTES_KEY, notes);
 
 const DEFAULT_SETTINGS: AppSettings = {

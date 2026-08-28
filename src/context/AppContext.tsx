@@ -156,7 +156,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     await savePlanItems(next);
   }
 
-  const STATUS_CYCLE: PlanItemStatus[] = ["pending", "done", "partial"];
+  const STATUS_CYCLE: PlanItemStatus[] = ["pending", "done", "failed"];
 
   async function cyclePlanItemStatus(id: string): Promise<void> {
     const next = planItems.map((p) => {
@@ -277,6 +277,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           tags: n.tags ?? [],
           date: n.date ?? todayISODate(),
           pinned: n.pinned ?? false,
+          area: n.area ?? "otro",
+          subject: n.subject,
           examScore: n.examScore,
           createdAt: existingIdx >= 0 ? nextNotes[existingIdx].createdAt : now,
           updatedAt: now,

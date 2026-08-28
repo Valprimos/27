@@ -42,7 +42,11 @@ export interface DailyEntry {
 // solo ni se convierte en un hábito semanal: vive únicamente ese día.
 export type PlanCategory = "entrenamiento" | "ingles" | "estudio" | "dinero" | "examen" | "otro";
 
-export type PlanItemStatus = "pending" | "done" | "partial";
+// "pending": aún no ha llegado su momento o no se ha marcado. "done": lo
+// hiciste y te salió bien. "failed": lo intentaste ese día pero no lo
+// conseguiste. Si la fecha ya pasó y sigue "pending", se cuenta como
+// perdido/a en las estadísticas (no existe un "pendiente" indefinido).
+export type PlanItemStatus = "pending" | "done" | "failed";
 
 export interface PlanItem {
   id: string;
@@ -63,6 +67,10 @@ export interface ExamScore {
   total: number;
 }
 
+// Clasificación de las notas: aparte están las notas de inglés, y aparte las
+// del instituto, que a su vez se dividen por asignatura.
+export type NoteArea = "ingles" | "instituto" | "otro";
+
 export interface Note {
   id: string;
   title: string;
@@ -70,6 +78,8 @@ export interface Note {
   tags: string[];
   date: string; // YYYY-MM-DD, fecha de referencia (ej. fecha del examen)
   pinned: boolean;
+  area: NoteArea;
+  subject?: string; // asignatura, solo relevante si area === "instituto"
   examScore?: ExamScore;
   createdAt: string;
   updatedAt: string;
@@ -91,7 +101,7 @@ export interface ImportDocument {
     targetValue?: number;
     unit?: string;
     status?: PlanItemStatus;
-    /** @deprecated usa "status" ("done" | "partial" | "pending") */
+    /** @deprecated usa "status" ("done" | "failed" | "pending") */
     completed?: boolean;
   }>;
   notes?: Array<{
@@ -101,6 +111,8 @@ export interface ImportDocument {
     tags?: string[];
     date?: string;
     pinned?: boolean;
+    area?: NoteArea;
+    subject?: string;
     examScore?: ExamScore;
   }>;
   goals?: Array<{

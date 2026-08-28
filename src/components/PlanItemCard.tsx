@@ -2,43 +2,33 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { PlanItem } from "@/types";
 import { GlassCard } from "./GlassCard";
-import { CATEGORY_LABEL, categoryGradient, colors } from "@/theme";
-import { confirmAsync } from "@/utils/confirm";
+import { CATEGORY_LABEL, categoryGradient, colors, STATUS_META } from "@/theme";
+import { effectiveStatus } from "@/utils/planItem";
 
 interface Props {
   item: PlanItem;
   onPress: () => void;
   onCycleStatus: () => void;
-  onDelete: () => void;
 }
 
-const STATUS_META = {
-  pending: { icon: "", label: "" },
-  done: { icon: "✓", label: "Completado" },
-  partial: { icon: "½", label: "Parcial" },
-};
-
-export const PlanItemCard: React.FC<Props> = ({ item, onPress, onCycleStatus, onDelete }) => {
+export const PlanItemCard: React.FC<Props> = ({ item, onPress, onCycleStatus }) => {
   const gradient = categoryGradient[item.category] ?? categoryGradient.otro;
-  const status = STATUS_META[item.status];
-
-  async function handleDelete() {
-    const ok = await confirmAsync("Eliminar tarea", `¿Eliminar "${item.title}" del calendario?`);
-    if (ok) onDelete();
-  }
+  const status = effectiveStatus(item);
+  const statusMeta = STATUS_META[status];
+  const done = item.status === "done";
 
   return (
-    <GlassCard accentGradient={gradient} style={[styles.card, item.status === "done" && styles.cardDone]}>
+    <GlassCard accentGradient={gradient} style={[styles.card, done && styles.cardDone]}>
       <Pressable onPress={onPress} style={styles.row}>
         <View style={styles.iconCircle}>
           <Text style={{ fontSize: 20 }}>{item.icon}</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={[styles.title, item.status === "done" && styles.titleDone]}>{item.title}</Text>
+          <Text style={[styles.title, done && styles.titleDone]}>{item.title}</Text>
           <Text style={styles.meta}>
             {CATEGORY_LABEL[item.category] ?? "Otro"}
             {item.targetValue ? ` · ${item.targetValue} ${item.unit ?? ""}` : ""}
-            {item.status === "partial" ? " · Parcial" : ""}
+            {status !== "pending" ? ` · ${statusMeta.label}` : ""}
           </Text>
           {!!item.description && (
             <Text style={styles.description} numberOfLines={2}>
@@ -51,17 +41,10 @@ export const PlanItemCard: React.FC<Props> = ({ item, onPress, onCycleStatus, on
             e.stopPropagation();
             onCycleStatus();
           }}
-          style={[
-            styles.checkbox,
-            item.status === "done" && styles.checkboxDone,
-            item.status === "partial" && styles.checkboxPartial,
-          ]}
+          style={[styles.checkbox, { borderColor: statusMeta.color }, status !== "pending" && { backgroundColor: statusMeta.color }]}
         >
-          <Text style={styles.checkmark}>{status.icon}</Text>
+          <Text style={styles.checkmark}>{item.status === "pending" ? "" : STATUS_META[item.status].icon}</Text>
         </Pressable>
-      </Pressable>
-      <Pressable onPress={handleDelete} style={styles.deleteBtn}>
-        <Text style={styles.deleteText}>Eliminar</Text>
       </Pressable>
     </GlassCard>
   );
@@ -69,7 +52,7 @@ export const PlanItemCard: React.FC<Props> = ({ item, onPress, onCycleStatus, on
 
 const styles = StyleSheet.create({
   card: { marginBottom: 10, gap: 4 },
-  cardDone: { opacity: 0.6 },
+  cardDone: { opacity: 0.75 },
   row: { flexDirection: "row", alignItems: "center", gap: 12 },
   iconCircle: {
     width: 40,
@@ -88,13 +71,8 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     borderWidth: 2,
-    borderColor: colors.cardBorderStrong,
     alignItems: "center",
     justifyContent: "center",
   },
-  checkboxDone: { backgroundColor: "#34d399", borderColor: "#34d399" },
-  checkboxPartial: { backgroundColor: "#fbbf24", borderColor: "#fbbf24" },
   checkmark: { color: "#04140c", fontWeight: "800" },
-  deleteBtn: { alignSelf: "flex-end", marginTop: 6 },
-  deleteText: { color: colors.textFaint, fontSize: 11 },
 });

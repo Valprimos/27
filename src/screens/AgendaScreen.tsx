@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function AgendaScreen({ navigation }: Props) {
-  const { planItems, cyclePlanItemStatus, deletePlanItem } = useApp();
+  const { planItems, cyclePlanItemStatus } = useApp();
   const today = todayISODate();
 
   const sections = useMemo(() => {
@@ -54,9 +54,8 @@ export default function AgendaScreen({ navigation }: Props) {
         renderItem={({ item }) => (
           <PlanItemCard
             item={item}
-            onPress={() => navigation.navigate("PlanItemForm", { date: item.date, planItemId: item.id })}
+            onPress={() => navigation.navigate("PlanItemDetail", { planItemId: item.id })}
             onCycleStatus={() => cyclePlanItemStatus(item.id)}
-            onDelete={() => deletePlanItem(item.id)}
           />
         )}
         ListEmptyComponent={

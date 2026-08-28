@@ -31,7 +31,7 @@ export default function MainTabs({ navigation }: Props) {
         {tab === "home" && <HomeScreen navigation={navigation} />}
         {tab === "agenda" && <AgendaScreen navigation={navigation} />}
         {tab === "notes" && <NotesScreen navigation={navigation} />}
-        {tab === "stats" && <StatsScreen />}
+        {tab === "stats" && <StatsScreen navigation={navigation} />}
         {tab === "settings" && <SettingsScreen navigation={navigation} />}
       </View>
       <View style={styles.tabBarWrapper}>

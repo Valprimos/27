@@ -9,8 +9,11 @@ import MainTabs from "@/navigation/MainTabs";
 import GoalsScreen from "@/screens/GoalsScreen";
 import GoalFormScreen from "@/screens/GoalFormScreen";
 import PlanItemFormScreen from "@/screens/PlanItemFormScreen";
+import PlanItemDetailScreen from "@/screens/PlanItemDetailScreen";
 import ImportPlanScreen from "@/screens/ImportPlanScreen";
 import NoteFormScreen from "@/screens/NoteFormScreen";
+import CategoryStatsScreen from "@/screens/CategoryStatsScreen";
+import GoalStatsScreen from "@/screens/GoalStatsScreen";
 import { RootStackParamList } from "@/navigation/types";
 import { colors } from "@/theme";
 
@@ -65,6 +68,9 @@ export default function App() {
                 component={NoteFormScreen}
                 options={{ title: "Nota", presentation: "modal" }}
               />
+              <Stack.Screen name="PlanItemDetail" component={PlanItemDetailScreen} options={{ title: "Tarea" }} />
+              <Stack.Screen name="CategoryStats" component={CategoryStatsScreen} options={{ title: "" }} />
+              <Stack.Screen name="GoalStats" component={GoalStatsScreen} options={{ title: "" }} />
             </Stack.Navigator>
           </NavigationContainer>
         </ScreenBackground>

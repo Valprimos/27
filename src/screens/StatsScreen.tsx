@@ -1,16 +1,24 @@
 import React, { useMemo } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 import { useApp } from "@/context/AppContext";
 import { computeGoalStats, computeOverallStats } from "@/utils/stats";
-import { WEEKDAY_LABELS } from "@/utils/dates";
+import { effectiveStatus } from "@/utils/planItem";
+import { WEEKDAY_LABELS, todayISODate } from "@/utils/dates";
 import { GlassCard } from "@/components/GlassCard";
 import { ProgressBar } from "@/components/ProgressBar";
 import { CATEGORY_LABEL, categoryGradient, colors, gradients } from "@/theme";
 import { goalGradient } from "@/utils/color";
 import { PlanCategory } from "@/types";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "@/navigation/types";
 
-export default function StatsScreen() {
+interface Props {
+  navigation: NativeStackNavigationProp<RootStackParamList, "Main">;
+}
+
+export default function StatsScreen({ navigation }: Props) {
   const { goals, entries, planItems } = useApp();
+  const today = todayISODate();
 
   const activeGoals = goals.filter((g) => g.active);
   const overall = useMemo(() => computeOverallStats(goals, entries), [goals, entries]);
@@ -20,18 +28,15 @@ export default function StatsScreen() {
     return cats
       .map((cat) => {
         const items = planItems.filter((p) => p.category === cat);
-        const done = items.filter((p) => p.status === "done").length;
-        const partial = items.filter((p) => p.status === "partial").length;
-        const pending = items.filter((p) => p.status === "pending").length;
-        const score = items.length > 0 ? (done + partial * 0.5) / items.length : 0;
-        return { cat, total: items.length, done, partial, pending, score };
+        const done = items.filter((p) => effectiveStatus(p, today) === "done").length;
+        const failed = items.filter((p) => effectiveStatus(p, today) === "failed").length;
+        const missed = items.filter((p) => effectiveStatus(p, today) === "missed").length;
+        const resolved = done + failed + missed;
+        const score = resolved > 0 ? done / resolved : 0;
+        return { cat, total: items.length, done, failed, missed, score };
       })
       .sort((a, b) => b.total - a.total);
-  }, [planItems]);
-
-  const planTotal = planItems.length;
-  const planDone = planItems.filter((p) => p.status === "done").length;
-  const planPartial = planItems.filter((p) => p.status === "partial").length;
+  }, [planItems, today]);
 
   return (
     <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }}>
@@ -45,67 +50,67 @@ export default function StatsScreen() {
       </View>
 
       <Text style={styles.header}>Calendario por categoría</Text>
-      {byCategory.length === 0 && <Text style={styles.empty}>Importa o añade tareas al calendario para verlas aquí.</Text>}
-      {byCategory.map(({ cat, total, done, partial, pending, score }) => (
-        <GlassCard key={cat} accentGradient={categoryGradient[cat] ?? categoryGradient.otro} style={styles.categoryCard}>
-          <View style={styles.categoryHeaderRow}>
-            <Text style={styles.categoryName}>{CATEGORY_LABEL[cat] ?? cat}</Text>
-            <Text style={styles.categoryScore}>{Math.round(score * 100)}%</Text>
-          </View>
-          <ProgressBar value={score} gradient={categoryGradient[cat] ?? categoryGradient.otro} />
-          <Text style={styles.categoryBreakdown}>
-            ✅ {done} completadas · ½ {partial} parciales · ⏳ {pending} pendientes · {total} en total
-          </Text>
-        </GlassCard>
+      <Text style={styles.hint}>Toca una categoría para ver sus estadísticas completas</Text>
+      {byCategory.length === 0 && (
+        <Text style={styles.empty}>Importa o añade tareas al calendario para verlas aquí.</Text>
+      )}
+      {byCategory.map(({ cat, total, done, failed, missed, score }) => (
+        <Pressable key={cat} onPress={() => navigation.navigate("CategoryStats", { category: cat })}>
+          <GlassCard accentGradient={categoryGradient[cat] ?? categoryGradient.otro} style={styles.categoryCard}>
+            <View style={styles.categoryHeaderRow}>
+              <Text style={styles.categoryName}>{CATEGORY_LABEL[cat] ?? cat}</Text>
+              <Text style={styles.categoryScore}>{Math.round(score * 100)}% ›</Text>
+            </View>
+            <ProgressBar value={score} gradient={categoryGradient[cat] ?? categoryGradient.otro} />
+            <Text style={styles.categoryBreakdown}>
+              ✅ {done} hechas · 🟠 {failed} intentadas · – {missed} perdidas · {total} en total
+            </Text>
+          </GlassCard>
+        </Pressable>
       ))}
 
-      {planTotal > 0 && (
-        <GlassCard accentGradient={gradients.cyan} style={{ marginTop: 4 }}>
-          <Text style={styles.calendarStatText}>
-            📅 Total calendario: {planDone}/{planTotal} completadas
-            {planPartial > 0 ? ` (+${planPartial} parciales)` : ""}
-          </Text>
-        </GlassCard>
-      )}
-
       <Text style={styles.header}>Objetivos recurrentes</Text>
+      <Text style={styles.hint}>Toca un objetivo para ver su historial completo</Text>
       {activeGoals.map((goal) => {
         const stats = computeGoalStats(goal, entries);
         const gradient = goalGradient(goal.color);
         return (
-          <GlassCard key={goal.id} accentGradient={gradient} style={styles.goalCard}>
-            <View style={styles.goalHeaderRow}>
-              <Text style={{ fontSize: 20 }}>{goal.icon}</Text>
-              <Text style={styles.goalName}>{goal.name}</Text>
-            </View>
-            <View style={styles.weekRow}>
-              {stats.last7Days.map((done, idx) => (
-                <View key={idx} style={styles.weekDay}>
-                  <Text style={styles.weekDayLabel}>
-                    {WEEKDAY_LABELS[(new Date().getDay() - (6 - idx) + 7) % 7]}
+          <Pressable key={goal.id} onPress={() => navigation.navigate("GoalStats", { goalId: goal.id })}>
+            <GlassCard accentGradient={gradient} style={styles.goalCard}>
+              <View style={styles.goalHeaderRow}>
+                <Text style={{ fontSize: 20 }}>{goal.icon}</Text>
+                <Text style={styles.goalName}>{goal.name}</Text>
+                <Text style={styles.chevron}>›</Text>
+              </View>
+              <View style={styles.weekRow}>
+                {stats.last7Days.map((done, idx) => (
+                  <View key={idx} style={styles.weekDay}>
+                    <Text style={styles.weekDayLabel}>
+                      {WEEKDAY_LABELS[(new Date().getDay() - (6 - idx) + 7) % 7]}
+                    </Text>
+                    <View style={[styles.dot, { backgroundColor: done ? goal.color : "rgba(255,255,255,0.08)" }]} />
+                  </View>
+                ))}
+              </View>
+              <View style={styles.statsGrid}>
+                <Text style={styles.statText}>🔥 Racha actual: {stats.currentStreak} días</Text>
+                <Text style={styles.statText}>🏆 Mejor racha: {stats.bestStreak} días</Text>
+                <Text style={styles.statText}>✅ Completados: {stats.totalCompleted}</Text>
+                <Text style={styles.statText}>⏭️ Saltados: {stats.totalSkipped}</Text>
+                <Text style={styles.statText}>📊 Cumplimiento: {Math.round(stats.completionRate * 100)}%</Text>
+                {goal.kind === "numeric" && (
+                  <Text style={styles.statText}>
+                    Σ Total acumulado: {stats.totalProgress} {goal.unit ?? ""}
                   </Text>
-                  <View style={[styles.dot, { backgroundColor: done ? goal.color : "rgba(255,255,255,0.08)" }]} />
-                </View>
-              ))}
-            </View>
-            <View style={styles.statsGrid}>
-              <Text style={styles.statText}>🔥 Racha actual: {stats.currentStreak} días</Text>
-              <Text style={styles.statText}>🏆 Mejor racha: {stats.bestStreak} días</Text>
-              <Text style={styles.statText}>✅ Completados: {stats.totalCompleted}</Text>
-              <Text style={styles.statText}>⏭️ Saltados: {stats.totalSkipped}</Text>
-              <Text style={styles.statText}>📊 Cumplimiento: {Math.round(stats.completionRate * 100)}%</Text>
-              {goal.kind === "numeric" && (
-                <Text style={styles.statText}>
-                  Σ Total acumulado: {stats.totalProgress} {goal.unit ?? ""}
-                </Text>
-              )}
-              {goal.kind === "money" && (
-                <Text style={styles.statText}>
-                  💰 Ahorrado: {goal.moneySaved ?? 0}€ / {goal.moneyTarget ?? 0}€
-                </Text>
-              )}
-            </View>
-          </GlassCard>
+                )}
+                {goal.kind === "money" && (
+                  <Text style={styles.statText}>
+                    💰 Ahorrado: {goal.moneySaved ?? 0}€ / {goal.moneyTarget ?? 0}€
+                  </Text>
+                )}
+              </View>
+            </GlassCard>
+          </Pressable>
         );
       })}
 
@@ -124,7 +129,8 @@ function SummaryTile({ label, value, gradient }: { label: string; value: string;
 }
 
 const styles = StyleSheet.create({
-  header: { color: colors.text, fontSize: 22, fontWeight: "800", marginTop: 10, marginBottom: 14 },
+  header: { color: colors.text, fontSize: 22, fontWeight: "800", marginTop: 10, marginBottom: 4 },
+  hint: { color: colors.textFaint, fontSize: 11, marginBottom: 12 },
   summaryRow: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   tile: { flexBasis: "47%" },
   tileValue: { fontSize: 24, fontWeight: "800", color: colors.text },
@@ -134,10 +140,10 @@ const styles = StyleSheet.create({
   categoryName: { color: colors.text, fontWeight: "700", fontSize: 15 },
   categoryScore: { color: colors.text, fontWeight: "800", fontSize: 15 },
   categoryBreakdown: { color: colors.textDim, fontSize: 11 },
-  calendarStatText: { color: colors.text, fontWeight: "600" },
   goalCard: { marginBottom: 12, gap: 4 },
   goalHeaderRow: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 },
-  goalName: { color: colors.text, fontWeight: "700", fontSize: 15 },
+  goalName: { color: colors.text, fontWeight: "700", fontSize: 15, flex: 1 },
+  chevron: { color: colors.textFaint, fontSize: 18 },
   weekRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 12 },
   weekDay: { alignItems: "center", gap: 4 },
   weekDayLabel: { color: colors.textFaint, fontSize: 10 },

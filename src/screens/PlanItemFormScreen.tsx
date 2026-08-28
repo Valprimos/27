@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView, Pressable, Alert } from "react-native";
 import { useApp } from "@/context/AppContext";
-import { PlanCategory, PlanItemStatus } from "@/types";
+import { PlanCategory } from "@/types";
 import { GradientButton } from "@/components/GradientButton";
 import { confirmAsync } from "@/utils/confirm";
 import { categoryGradient, colors } from "@/theme";
@@ -19,12 +19,6 @@ const CATEGORIES: { key: PlanCategory; label: string; icon: string }[] = [
   { key: "otro", label: "Otro", icon: "🗓️" },
 ];
 
-const STATUS_OPTIONS: { key: PlanItemStatus; label: string }[] = [
-  { key: "pending", label: "Pendiente" },
-  { key: "partial", label: "Parcial" },
-  { key: "done", label: "Completado" },
-];
-
 export default function PlanItemFormScreen({ route, navigation }: Props) {
   const { planItems, addPlanItem, updatePlanItem, deletePlanItem } = useApp();
   const editing = route.params?.planItemId ? planItems.find((p) => p.id === route.params.planItemId) : undefined;
@@ -35,7 +29,6 @@ export default function PlanItemFormScreen({ route, navigation }: Props) {
   const [category, setCategory] = useState<PlanCategory>(editing?.category ?? "entrenamiento");
   const [targetValue, setTargetValue] = useState(editing?.targetValue ? String(editing.targetValue) : "");
   const [unit, setUnit] = useState(editing?.unit ?? "");
-  const [status, setStatus] = useState<PlanItemStatus>(editing?.status ?? "pending");
 
   async function handleSave() {
     if (!title.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -53,7 +46,6 @@ export default function PlanItemFormScreen({ route, navigation }: Props) {
         icon: editing.icon || cat.icon,
         targetValue: targetValue ? Number(targetValue) : undefined,
         unit: unit || undefined,
-        status,
       });
     } else {
       await addPlanItem({
@@ -141,23 +133,6 @@ export default function PlanItemFormScreen({ route, navigation }: Props) {
         placeholder="Detalles, series, temario..."
         placeholderTextColor={colors.textFaint}
       />
-
-      {editing && (
-        <>
-          <Text style={styles.label}>Estado</Text>
-          <View style={styles.wrapRow}>
-            {STATUS_OPTIONS.map((s) => (
-              <Pressable
-                key={s.key}
-                style={[styles.chip, status === s.key && styles.chipActive]}
-                onPress={() => setStatus(s.key)}
-              >
-                <Text style={styles.chipText}>{s.label}</Text>
-              </Pressable>
-            ))}
-          </View>
-        </>
-      )}
 
       <GradientButton
         label={editing ? "Guardar cambios" : "Guardar en el calendario"}

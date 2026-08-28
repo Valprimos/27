@@ -44,6 +44,25 @@ export const CATEGORY_LABEL: Record<string, string> = {
   otro: "Otro",
 };
 
+export const areaGradient: Record<string, readonly [string, string]> = {
+  ingles: gradients.cyan,
+  instituto: gradients.blue,
+  otro: gradients.purple,
+};
+
+export const AREA_LABEL: Record<string, string> = {
+  ingles: "Inglés",
+  instituto: "Instituto",
+  otro: "Otro",
+};
+
+export const STATUS_META: Record<string, { icon: string; label: string; color: string }> = {
+  pending: { icon: "", label: "Pendiente", color: colors.textFaint },
+  done: { icon: "✓", label: "Hecho", color: "#34d399" },
+  failed: { icon: "✗", label: "Intentado, no conseguido", color: "#f87171" },
+  missed: { icon: "–", label: "Perdido (no se hizo ese día)", color: "#64748b" },
+};
+
 export const radius = {
   sm: 12,
   md: 18,

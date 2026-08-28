@@ -14,8 +14,7 @@ interface Props {
 }
 
 export default function HomeScreen({ navigation }: Props) {
-  const { goals, entries, getEntry, setEntryForToday, planItems, cyclePlanItemStatus, deletePlanItem, settings } =
-    useApp();
+  const { goals, entries, getEntry, setEntryForToday, planItems, cyclePlanItemStatus, settings } = useApp();
 
   const today = todayISODate();
   const todaysGoals = useMemo(
@@ -34,7 +33,7 @@ export default function HomeScreen({ navigation }: Props) {
   const doneTasks =
     todaysGoals.filter((g) => getEntry(g.id, today)?.completed).length +
     todaysPlanItems.filter((p) => p.status === "done").length;
-  const partialTasks = todaysPlanItems.filter((p) => p.status === "partial").length;
+  const failedTasks = todaysPlanItems.filter((p) => p.status === "failed").length;
 
   return (
     <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 40 }}>
@@ -42,7 +41,7 @@ export default function HomeScreen({ navigation }: Props) {
       <Text style={styles.greeting}>{settings.userName ? `Hola, ${settings.userName} 👋` : "Hoy"}</Text>
       <Text style={styles.headerText}>
         {doneTasks}/{totalTasks || 0} completados hoy
-        {partialTasks > 0 ? ` (+${partialTasks} parcial${partialTasks > 1 ? "es" : ""})` : ""}
+        {failedTasks > 0 ? ` (${failedTasks} intentado${failedTasks > 1 ? "s" : ""})` : ""}
       </Text>
 
       <View style={styles.quickRow}>
@@ -73,9 +72,8 @@ export default function HomeScreen({ navigation }: Props) {
         <PlanItemCard
           key={item.id}
           item={item}
-          onPress={() => navigation.navigate("PlanItemForm", { date: item.date, planItemId: item.id })}
+          onPress={() => navigation.navigate("PlanItemDetail", { planItemId: item.id })}
           onCycleStatus={() => cyclePlanItemStatus(item.id)}
-          onDelete={() => deletePlanItem(item.id)}
         />
       ))}
 

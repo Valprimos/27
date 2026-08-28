@@ -20,7 +20,7 @@ const EXAMPLE = `{
   ],
   "notes": [
     { "title": "Examen Cambridge C1", "body": "Repasar listening y writing.",
-      "tags": ["examen", "inglés"], "date": "2026-05-10",
+      "area": "ingles", "date": "2026-05-10",
       "examScore": { "correct": 42, "total": 50 } }
   ]
 }`;
