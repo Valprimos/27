@@ -1,28 +1,26 @@
 # Mis Objetivos Diarios 🎯
 
-App personal (React Native + Expo) para gestionar tus objetivos diarios: estudiar
-inglés, hacer ejercicio, ahorrar dinero, escribir notas... y ver estadísticas de
-cumplimiento a lo largo del tiempo. Todos los datos se guardan **localmente en tu
-móvil** (sin backend, sin cuentas).
+App personal (React Native + Expo) para gestionar tus objetivos: estudiar inglés,
+hacer ejercicio, ahorrar dinero, entrenamientos con fecha, notas de exámenes... y
+ver estadísticas de cumplimiento. Todos los datos se guardan **localmente en tu
+dispositivo** (sin backend, sin cuentas, sin IA de pago).
 
 ## Funcionalidades
 
-- **Objetivos personalizados** de 4 tipos:
-  - **Hábito** (sí/no): meditar, leer, etc.
-  - **Numérico**: minutos de inglés, páginas leídas, repeticiones de ejercicio...
-  - **Dinero**: meta de ahorro con importe objetivo.
-  - **Notas/diario**: reflexión libre del día.
-  - Cada objetivo tiene icono, color, días de la semana activos y cantidad diaria
-    objetivo con su unidad.
-- **Pantalla "Hoy"**: te dice exactamente cuánto tienes que hacer de cada cosa hoy,
-  y te deja marcarlo como hecho (con la cantidad real) o saltado.
-- **Plan inteligente del día** (opcional, con IA): genera instrucciones concretas
-  para cada objetivo pendiente usando la API de Claude.
-- **Evaluación del día** (opcional, con IA): al final del día, te da feedback sobre
-  lo que has cumplido y un consejo para mañana, a partir de tus notas.
-- **Estadísticas**: racha actual, mejor racha histórica, días completados, días
-  saltados, % de cumplimiento, progreso acumulado (minutos totales, dinero
-  ahorrado...) y vista de los últimos 7 días por objetivo.
+- **Hoy**: lo que toca hacer hoy — tareas puntuales del calendario y objetivos
+  recurrentes — con botones rápidos para marcarlas hechas o saltadas.
+- **Calendario**: agenda con todas tus tareas con fecha (entrenamientos futuros,
+  exámenes, lo que sea), agrupadas por día. No son hábitos que se repiten solos:
+  cada una vive en su fecha, tal y como la hayas planeado.
+- **Notas**: un cuaderno libre para apuntes de exámenes, ideas o lo que quieras,
+  con etiquetas y buscador.
+- **Objetivos recurrentes** (opcional, desde Ajustes): hábitos, metas numéricas
+  diarias o ahorro, con racha y % de cumplimiento.
+- **Estadísticas**: racha actual, mejor racha histórica, días completados/saltados,
+  progreso acumulado y vista semanal por objetivo.
+- **Importar plan**: en vez de pagar por una IA conectada, hablas con Claude en la
+  conversación, te da un documento (JSON) con tu plan y lo pegas en la app. Se
+  procesa 100% offline y sin coste.
 
 ## Cómo ejecutarla
 
@@ -34,16 +32,47 @@ npm start
 Luego escanea el código QR con la app **Expo Go** (Android/iOS) o pulsa `a`/`i`
 para abrir un emulador.
 
-## Activar el asistente de IA (opcional)
+## Importar un plan (sin gastar en IA)
 
-1. Ve a **Ajustes** dentro de la app.
-2. Activa el interruptor "Activar IA (Claude)".
-3. Pega tu propia clave de API de Anthropic (la puedes crear en
-   https://console.anthropic.com). Se guarda cifrada solo en tu dispositivo
-   (`expo-secure-store`) y se usa únicamente para llamar directamente a la API
-   de Anthropic desde tu móvil.
+1. Habla con Claude sobre tu plan de entrenamiento, tus exámenes o tus objetivos.
+2. Pídele: *"dame el documento para importar a la app"*.
+3. Copia el JSON que te dé y pégalo en **Ajustes → Importar plan** (o desde el
+   botón "⬇ Importar plan" en la pantalla Hoy).
 
-Sin clave configurada, la app funciona igualmente al 100% en modo local/manual.
+Formato del documento (todos los campos excepto `version` son opcionales):
+
+```json
+{
+  "version": 1,
+  "planItems": [
+    {
+      "date": "2026-05-17",
+      "title": "Entrenamiento de piernas",
+      "description": "4x10 sentadillas, 3x12 prensa, 3x15 zancadas",
+      "category": "entrenamiento",
+      "icon": "🏋️",
+      "targetValue": 60,
+      "unit": "minutos"
+    }
+  ],
+  "notes": [
+    {
+      "title": "Examen Cálculo II",
+      "body": "Temas: derivadas, integrales, series.",
+      "tags": ["examen", "cálculo"],
+      "date": "2026-05-10"
+    }
+  ],
+  "goals": [
+    { "name": "Ahorrar para viaje", "kind": "money", "icon": "💰", "moneyTarget": 1500 }
+  ]
+}
+```
+
+- `category` de `planItems`: `entrenamiento` | `estudio` | `dinero` | `examen` | `otro`.
+- `kind` de `goals`: `habit` | `numeric` | `money`.
+- Volver a importar un `planItem`/`nota`/`goal` con el mismo `id` lo actualiza en
+  vez de duplicarlo.
 
 ## Versión web instalable (PWA) en GitHub Pages
 
@@ -71,14 +100,15 @@ Además de la app móvil, el proyecto se puede publicar como una web instalable
 ## Estructura del proyecto
 
 ```
-App.tsx                     Punto de entrada y navegación
-src/types.ts                 Modelos de datos (Goal, DailyEntry, Settings...)
-src/storage.ts                Persistencia local (AsyncStorage + SecureStore)
-src/context/AppContext.tsx    Estado global de la app
-src/utils/dates.ts             Utilidades de fechas
-src/utils/stats.ts             Cálculo de rachas y estadísticas
-src/services/ai.ts             Integración opcional con la API de Claude
-src/screens/                   Pantallas: Hoy, Objetivos, Estadísticas, Ajustes
-src/components/                Componentes reutilizables (GoalCard, ProgressBar)
-src/navigation/                Navegación (stack + tabs personalizadas)
+App.tsx                        Punto de entrada y navegación
+src/types.ts                    Modelos de datos (Goal, PlanItem, Note...)
+src/storage.ts                   Persistencia local (AsyncStorage)
+src/context/AppContext.tsx       Estado global de la app + importDocument()
+src/utils/dates.ts                Utilidades de fechas
+src/utils/stats.ts                Cálculo de rachas y estadísticas
+src/utils/color.ts                Gradientes derivados del color de cada objetivo
+src/theme.ts                      Paleta y gradientes (look Apple)
+src/screens/                      Hoy, Calendario, Notas, Estadísticas, Ajustes...
+src/components/                   GlassCard, GradientButton, GoalCard, PlanItemCard...
+src/navigation/                   Navegación (stack + tabs personalizadas)
 ```

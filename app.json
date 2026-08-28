@@ -36,7 +36,6 @@
       "lang": "es",
       "description": "App personal para seguir tus objetivos diarios: estudio, ejercicio, ahorro y notas."
     },
-    "plugins": ["expo-secure-store"],
     "experiments": {
       "baseUrl": "/27"
     }

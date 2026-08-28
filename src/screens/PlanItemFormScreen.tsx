@@ -1,0 +1,143 @@
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput, ScrollView, Pressable, Alert } from "react-native";
+import { useApp } from "@/context/AppContext";
+import { PlanCategory } from "@/types";
+import { GradientButton } from "@/components/GradientButton";
+import { categoryGradient, colors } from "@/theme";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "@/navigation/types";
+
+type Props = NativeStackScreenProps<RootStackParamList, "PlanItemForm">;
+
+const CATEGORIES: { key: PlanCategory; label: string; icon: string }[] = [
+  { key: "entrenamiento", label: "Entrenamiento", icon: "🏋️" },
+  { key: "estudio", label: "Estudio", icon: "📚" },
+  { key: "examen", label: "Examen", icon: "📝" },
+  { key: "dinero", label: "Dinero", icon: "💰" },
+  { key: "otro", label: "Otro", icon: "🗓️" },
+];
+
+export default function PlanItemFormScreen({ route, navigation }: Props) {
+  const { addPlanItem } = useApp();
+  const [date, setDate] = useState(route.params?.date ?? "");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState<PlanCategory>("entrenamiento");
+  const [targetValue, setTargetValue] = useState("");
+  const [unit, setUnit] = useState("");
+
+  async function handleSave() {
+    if (!title.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      Alert.alert("Faltan datos", "Ponle un título y una fecha en formato AAAA-MM-DD.");
+      return;
+    }
+    const cat = CATEGORIES.find((c) => c.key === category)!;
+    await addPlanItem({
+      date,
+      title: title.trim(),
+      description: description || undefined,
+      category,
+      icon: cat.icon,
+      targetValue: targetValue ? Number(targetValue) : undefined,
+      unit: unit || undefined,
+    });
+    navigation.goBack();
+  }
+
+  return (
+    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }}>
+      <Text style={styles.label}>Fecha (AAAA-MM-DD)</Text>
+      <TextInput
+        style={styles.input}
+        value={date}
+        onChangeText={setDate}
+        placeholder="2026-05-17"
+        placeholderTextColor={colors.textFaint}
+      />
+
+      <Text style={styles.label}>Título</Text>
+      <TextInput
+        style={styles.input}
+        value={title}
+        onChangeText={setTitle}
+        placeholder="Entrenamiento de piernas"
+        placeholderTextColor={colors.textFaint}
+      />
+
+      <Text style={styles.label}>Categoría</Text>
+      <View style={styles.wrapRow}>
+        {CATEGORIES.map((c) => (
+          <Pressable
+            key={c.key}
+            style={[styles.chip, category === c.key && styles.chipActive]}
+            onPress={() => setCategory(c.key)}
+          >
+            <Text style={styles.chipText}>
+              {c.icon} {c.label}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
+      <Text style={styles.label}>Cantidad (opcional)</Text>
+      <View style={styles.row}>
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          value={targetValue}
+          onChangeText={setTargetValue}
+          keyboardType="numeric"
+          placeholder="45"
+          placeholderTextColor={colors.textFaint}
+        />
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          value={unit}
+          onChangeText={setUnit}
+          placeholder="minutos, series..."
+          placeholderTextColor={colors.textFaint}
+        />
+      </View>
+
+      <Text style={styles.label}>Descripción (opcional)</Text>
+      <TextInput
+        style={[styles.input, { height: 90 }]}
+        value={description}
+        onChangeText={setDescription}
+        multiline
+        placeholder="Detalles, series, temario..."
+        placeholderTextColor={colors.textFaint}
+      />
+
+      <GradientButton
+        label="Guardar en el calendario"
+        gradient={categoryGradient[category]}
+        onPress={handleSave}
+        style={{ marginTop: 26 }}
+      />
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  label: { color: colors.textDim, fontWeight: "600", marginTop: 18, marginBottom: 8 },
+  input: {
+    backgroundColor: "rgba(255,255,255,0.06)",
+    color: colors.text,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+  },
+  row: { flexDirection: "row", gap: 10 },
+  wrapRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
+  chip: {
+    paddingVertical: 9,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+  },
+  chipActive: { backgroundColor: "rgba(124,58,237,0.25)", borderColor: "#a855f7" },
+  chipText: { color: colors.text, fontSize: 13 },
+});

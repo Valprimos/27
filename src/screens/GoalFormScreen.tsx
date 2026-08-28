@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable, ScrollView, Alert } from "react-native";
 import { useApp } from "@/context/AppContext";
-import { Goal, GoalKind, WeekDay } from "@/types";
+import { GoalKind, WeekDay } from "@/types";
 import { WEEKDAY_LABELS } from "@/utils/dates";
+import { GradientButton } from "@/components/GradientButton";
+import { colors } from "@/theme";
+import { goalGradient } from "@/utils/color";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
 
@@ -12,11 +15,10 @@ const KIND_OPTIONS: { kind: GoalKind; label: string; icon: string }[] = [
   { kind: "habit", label: "Hábito (sí/no)", icon: "✅" },
   { kind: "numeric", label: "Numérico (minutos, páginas...)", icon: "🔢" },
   { kind: "money", label: "Dinero / ahorro", icon: "💰" },
-  { kind: "notes", label: "Notas / diario", icon: "📝" },
 ];
 
 const COLORS = ["#22c55e", "#3b82f6", "#f59e0b", "#ec4899", "#a855f7", "#06b6d4"];
-const ICONS = ["🎯", "📚", "🏃", "💪", "🧘", "💰", "📝", "😴", "💧", "🥗", "🎸", "🧠"];
+const ICONS = ["🎯", "📚", "🏃", "💪", "🧘", "💰", "😴", "💧", "🥗", "🎸", "🧠"];
 
 export default function GoalFormScreen({ route, navigation }: Props) {
   const { goals, addGoal, updateGoal } = useApp();
@@ -29,9 +31,7 @@ export default function GoalFormScreen({ route, navigation }: Props) {
   const [dailyTarget, setDailyTarget] = useState(editing?.dailyTarget ? String(editing.dailyTarget) : "");
   const [unit, setUnit] = useState(editing?.unit ?? "");
   const [moneyTarget, setMoneyTarget] = useState(editing?.moneyTarget ? String(editing.moneyTarget) : "");
-  const [activeDays, setActiveDays] = useState<WeekDay[]>(
-    editing?.activeDays ?? [0, 1, 2, 3, 4, 5, 6]
-  );
+  const [activeDays, setActiveDays] = useState<WeekDay[]>(editing?.activeDays ?? [0, 1, 2, 3, 4, 5, 6]);
   const [notes, setNotes] = useState(editing?.notes ?? "");
 
   function toggleDay(day: WeekDay) {
@@ -65,14 +65,14 @@ export default function GoalFormScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 16, paddingBottom: 60 }}>
+    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }}>
       <Text style={styles.label}>Nombre del objetivo</Text>
       <TextInput
         style={styles.input}
         value={name}
         onChangeText={setName}
         placeholder="Ej. Estudiar inglés"
-        placeholderTextColor="#64748b"
+        placeholderTextColor={colors.textFaint}
       />
 
       <Text style={styles.label}>Tipo</Text>
@@ -90,7 +90,7 @@ export default function GoalFormScreen({ route, navigation }: Props) {
         ))}
       </View>
 
-      {kind !== "notes" && kind !== "money" && (
+      {kind !== "money" && (
         <>
           <Text style={styles.label}>Cantidad diaria objetivo</Text>
           <View style={styles.row}>
@@ -100,14 +100,14 @@ export default function GoalFormScreen({ route, navigation }: Props) {
               onChangeText={setDailyTarget}
               keyboardType="numeric"
               placeholder="30"
-              placeholderTextColor="#64748b"
+              placeholderTextColor={colors.textFaint}
             />
             <TextInput
               style={[styles.input, { flex: 1 }]}
               value={unit}
               onChangeText={setUnit}
               placeholder="minutos, páginas..."
-              placeholderTextColor="#64748b"
+              placeholderTextColor={colors.textFaint}
             />
           </View>
         </>
@@ -122,7 +122,7 @@ export default function GoalFormScreen({ route, navigation }: Props) {
             onChangeText={setMoneyTarget}
             keyboardType="numeric"
             placeholder="1000"
-            placeholderTextColor="#64748b"
+            placeholderTextColor={colors.textFaint}
           />
         </>
       )}
@@ -167,63 +167,57 @@ export default function GoalFormScreen({ route, navigation }: Props) {
         onChangeText={setNotes}
         multiline
         placeholder="Por qué es importante este objetivo para ti..."
-        placeholderTextColor="#64748b"
+        placeholderTextColor={colors.textFaint}
       />
 
-      <Pressable style={styles.saveBtn} onPress={handleSave}>
-        <Text style={styles.saveBtnText}>{editing ? "Guardar cambios" : "Crear objetivo"}</Text>
-      </Pressable>
+      <GradientButton
+        label={editing ? "Guardar cambios" : "Crear objetivo"}
+        gradient={goalGradient(color)}
+        onPress={handleSave}
+        style={{ marginTop: 26 }}
+      />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0b1220" },
-  label: { color: "#cbd5e1", fontWeight: "600", marginTop: 18, marginBottom: 8 },
+  label: { color: colors.textDim, fontWeight: "600", marginTop: 18, marginBottom: 8 },
   input: {
-    backgroundColor: "#111827",
-    color: "#f8fafc",
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    color: colors.text,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     borderWidth: 1,
-    borderColor: "#1f2937",
+    borderColor: colors.cardBorder,
   },
   row: { flexDirection: "row", gap: 10 },
   wrapRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   chip: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
+    paddingVertical: 9,
+    paddingHorizontal: 14,
+    borderRadius: 999,
     borderWidth: 1,
-    borderColor: "#334155",
+    borderColor: colors.cardBorder,
   },
-  chipActive: { backgroundColor: "#22c55e33", borderColor: "#22c55e" },
-  chipText: { color: "#e2e8f0", fontSize: 13 },
+  chipActive: { backgroundColor: "rgba(34,197,94,0.2)", borderColor: "#22c55e" },
+  chipText: { color: colors.text, fontSize: 13 },
   iconBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 10,
+    width: 46,
+    height: 46,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#334155",
+    borderColor: colors.cardBorder,
     alignItems: "center",
     justifyContent: "center",
   },
-  colorDot: { width: 32, height: 32, borderRadius: 16, borderWidth: 2, borderColor: "transparent" },
-  colorDotActive: { borderColor: "#f8fafc" },
+  colorDot: { width: 34, height: 34, borderRadius: 17, borderWidth: 2, borderColor: "transparent" },
+  colorDotActive: { borderColor: colors.text },
   dayChip: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#334155",
-  },
-  saveBtn: {
-    backgroundColor: "#22c55e",
-    paddingVertical: 14,
+    paddingVertical: 9,
+    paddingHorizontal: 12,
     borderRadius: 12,
-    alignItems: "center",
-    marginTop: 28,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
   },
-  saveBtnText: { color: "#052e14", fontWeight: "700", fontSize: 16 },
 });
