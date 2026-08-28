@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Mis Objetivos Diarios",
+    "slug": "daily-goals",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#0f172a"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.personal.dailygoals"
+    },
+    "android": {
+      "package": "com.personal.dailygoals",
+      "adaptiveIcon": {
+        "backgroundColor": "#0f172a"
+      }
+    },
+    "plugins": ["expo-secure-store"]
+  }
+}
