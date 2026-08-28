@@ -4,3 +4,5 @@ dist/
 web-build/
 *.log
 .DS_Store
+
+# docs/ SÍ se versiona: es la build web publicada en GitHub Pages

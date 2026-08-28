@@ -7,7 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "backgroundColor": "#0f172a"
+      "image": "./assets/splash.png",
+      "backgroundColor": "#0b1220",
+      "resizeMode": "contain"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -17,9 +19,26 @@
     "android": {
       "package": "com.personal.dailygoals",
       "adaptiveIcon": {
-        "backgroundColor": "#0f172a"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0b1220"
       }
     },
-    "plugins": ["expo-secure-store"]
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png",
+      "name": "Mis Objetivos Diarios",
+      "shortName": "Objetivos",
+      "themeColor": "#0b1220",
+      "backgroundColor": "#0b1220",
+      "display": "standalone",
+      "orientation": "portrait",
+      "lang": "es",
+      "description": "App personal para seguir tus objetivos diarios: estudio, ejercicio, ahorro y notas."
+    },
+    "plugins": ["expo-secure-store"],
+    "experiments": {
+      "baseUrl": "/27"
+    }
   }
 }

@@ -45,6 +45,29 @@ para abrir un emulador.
 
 Sin clave configurada, la app funciona igualmente al 100% en modo local/manual.
 
+## Versión web instalable (PWA) en GitHub Pages
+
+Además de la app móvil, el proyecto se puede publicar como una web instalable
+("Añadir a pantalla de inicio" en iPhone/Android) usando GitHub Pages:
+
+1. Genera la build web con:
+   ```bash
+   npm run build:web
+   ```
+   Esto exporta la app a la carpeta `docs/` (con `expo export -p web`) y añade
+   `manifest.webmanifest`, iconos y las etiquetas de Apple necesarias para que
+   Safari permita instalarla como app (`postexport-pwa.js`).
+2. En GitHub, ve a **Settings → Pages** y selecciona como *source*:
+   **Branch: `main`, carpeta `/docs`**.
+3. La web quedará disponible en `https://<usuario>.github.io/27/`. En iPhone,
+   ábrela con Safari → botón compartir → **"Añadir a pantalla de inicio"**: se
+   instalará como una app normal, con icono propio y sin barra de navegador.
+
+> Nota: la ruta base `/27` está fijada en `app.json` (`experiments.baseUrl`)
+> para que funcione en la subcarpeta del repo en GitHub Pages. Si cambias el
+> nombre del repo o usas un dominio propio, actualiza ese valor y vuelve a
+> ejecutar `npm run build:web`.
+
 ## Estructura del proyecto
 
 ```
