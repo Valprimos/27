@@ -82,6 +82,7 @@ export interface ImportDocument {
     icon?: string;
     targetValue?: number;
     unit?: string;
+    completed?: boolean;
   }>;
   notes?: Array<{
     id?: string;

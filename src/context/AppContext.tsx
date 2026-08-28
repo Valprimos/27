@@ -231,7 +231,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           icon: p.icon ?? "🗓️",
           targetValue: p.targetValue,
           unit: p.unit,
-          completed: existingIdx >= 0 ? nextPlanItems[existingIdx].completed : false,
+          completed: existingIdx >= 0 ? nextPlanItems[existingIdx].completed : p.completed ?? false,
           source: "import",
           updatedAt: now,
         };
