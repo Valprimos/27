@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, Alert } from "react-nati
 import { useApp } from "@/context/AppContext";
 import { GradientButton } from "@/components/GradientButton";
 import { GlassCard } from "@/components/GlassCard";
+import { KeyboardAvoidingScreen } from "@/components/KeyboardAvoidingScreen";
 import { colors, gradients } from "@/theme";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
@@ -55,7 +56,8 @@ export default function ImportPlanScreen({ navigation }: Props) {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }}>
+    <KeyboardAvoidingScreen>
+    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }} keyboardShouldPersistTaps="handled">
       <GlassCard accentGradient={gradients.blue} style={{ marginBottom: 16 }}>
         <Text style={styles.introTitle}>Cómo funciona</Text>
         <Text style={styles.introText}>
@@ -79,6 +81,7 @@ export default function ImportPlanScreen({ navigation }: Props) {
 
       <GradientButton label="Importar" gradient={gradients.blue} onPress={handleImport} style={{ marginTop: 18 }} />
     </ScrollView>
+    </KeyboardAvoidingScreen>
   );
 }
 

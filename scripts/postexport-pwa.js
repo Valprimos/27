@@ -44,6 +44,14 @@ function main() {
   const indexPath = path.join(OUT_DIR, "index.html");
   let html = fs.readFileSync(indexPath, "utf8");
 
+  // `viewport-fit=cover` es imprescindible para que la web instalada en el
+  // iPhone pinte también debajo de la isla dinámica / notch; sin esto esa
+  // franja de arriba se queda con el blanco por defecto de Safari.
+  html = html.replace(
+    /<meta name="viewport" content="[^"]*"\s*\/>/,
+    '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />'
+  );
+
   const pwaTags = `
   <link rel="manifest" href="${BASE_URL}/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="${BASE_URL}/apple-touch-icon.png" />
@@ -52,12 +60,15 @@ function main() {
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Objetivos" />
+  <style>
+    html, body { background-color: #050810; }
+  </style>
 </head>`;
 
   if (!html.includes("manifest.webmanifest")) {
     html = html.replace("</head>", pwaTags);
-    fs.writeFileSync(indexPath, html);
   }
+  fs.writeFileSync(indexPath, html);
 
   // GitHub Pages necesita este archivo para servir index.html en rutas desconocidas (SPA).
   fs.copyFileSync(indexPath, path.join(OUT_DIR, "404.html"));

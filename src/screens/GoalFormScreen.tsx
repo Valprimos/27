@@ -4,6 +4,7 @@ import { useApp } from "@/context/AppContext";
 import { GoalKind, WeekDay } from "@/types";
 import { WEEKDAY_LABELS } from "@/utils/dates";
 import { GradientButton } from "@/components/GradientButton";
+import { KeyboardAvoidingScreen } from "@/components/KeyboardAvoidingScreen";
 import { colors } from "@/theme";
 import { goalGradient } from "@/utils/color";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -65,7 +66,8 @@ export default function GoalFormScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }}>
+    <KeyboardAvoidingScreen>
+    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }} keyboardShouldPersistTaps="handled">
       <Text style={styles.label}>Nombre del objetivo</Text>
       <TextInput
         style={styles.input}
@@ -177,6 +179,7 @@ export default function GoalFormScreen({ route, navigation }: Props) {
         style={{ marginTop: 26 }}
       />
     </ScrollView>
+    </KeyboardAvoidingScreen>
   );
 }
 

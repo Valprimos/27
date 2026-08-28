@@ -14,6 +14,7 @@ import ImportPlanScreen from "@/screens/ImportPlanScreen";
 import NoteFormScreen from "@/screens/NoteFormScreen";
 import CategoryStatsScreen from "@/screens/CategoryStatsScreen";
 import GoalStatsScreen from "@/screens/GoalStatsScreen";
+import ExportSummaryScreen from "@/screens/ExportSummaryScreen";
 import { RootStackParamList } from "@/navigation/types";
 import { colors } from "@/theme";
 
@@ -71,6 +72,11 @@ export default function App() {
               <Stack.Screen name="PlanItemDetail" component={PlanItemDetailScreen} options={{ title: "Tarea" }} />
               <Stack.Screen name="CategoryStats" component={CategoryStatsScreen} options={{ title: "" }} />
               <Stack.Screen name="GoalStats" component={GoalStatsScreen} options={{ title: "" }} />
+              <Stack.Screen
+                name="ExportSummary"
+                component={ExportSummaryScreen}
+                options={{ title: "Exportar", presentation: "modal" }}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </ScreenBackground>

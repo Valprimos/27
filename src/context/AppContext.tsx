@@ -38,6 +38,10 @@ interface AppContextValue {
   updatePlanItem: (item: PlanItem) => Promise<void>;
   cyclePlanItemStatus: (id: string) => Promise<void>;
   setPlanItemStatus: (id: string, status: PlanItemStatus) => Promise<void>;
+  recordPlanItemResult: (
+    id: string,
+    patch: { status: PlanItemStatus; resultValue?: number; resultNote?: string }
+  ) => Promise<void>;
   deletePlanItem: (id: string) => Promise<void>;
   addNote: (note: Omit<Note, "id" | "createdAt" | "updatedAt">) => Promise<Note>;
   updateNote: (note: Note) => Promise<void>;
@@ -174,6 +178,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     await savePlanItems(next);
   }
 
+  async function recordPlanItemResult(
+    id: string,
+    patch: { status: PlanItemStatus; resultValue?: number; resultNote?: string }
+  ): Promise<void> {
+    const next = planItems.map((p) => (p.id === id ? { ...p, ...patch, updatedAt: new Date().toISOString() } : p));
+    setPlanItems(next);
+    await savePlanItems(next);
+  }
+
   async function deletePlanItem(id: string): Promise<void> {
     const next = planItems.filter((p) => p.id !== id);
     setPlanItems(next);
@@ -253,6 +266,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             existingIdx >= 0
               ? nextPlanItems[existingIdx].status
               : p.status ?? (p.completed ? "done" : "pending"),
+          resultValue: p.resultValue ?? (existingIdx >= 0 ? nextPlanItems[existingIdx].resultValue : undefined),
+          resultNote: p.resultNote ?? (existingIdx >= 0 ? nextPlanItems[existingIdx].resultNote : undefined),
           source: "import",
           updatedAt: now,
         };
@@ -318,6 +333,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updatePlanItem,
       cyclePlanItemStatus,
       setPlanItemStatus,
+      recordPlanItemResult,
       deletePlanItem,
       addNote,
       updateNote,

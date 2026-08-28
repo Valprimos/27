@@ -58,6 +58,10 @@ export interface PlanItem {
   targetValue?: number;
   unit?: string;
   status: PlanItemStatus;
+  // Lo que de verdad pasó ese día: el resultado real (ej. el tiempo que
+  // hiciste) y cómo te sentiste, en tus palabras.
+  resultValue?: number;
+  resultNote?: string;
   source: "manual" | "import";
   updatedAt: string;
 }
@@ -101,6 +105,8 @@ export interface ImportDocument {
     targetValue?: number;
     unit?: string;
     status?: PlanItemStatus;
+    resultValue?: number;
+    resultNote?: string;
     /** @deprecated usa "status" ("done" | "failed" | "pending") */
     completed?: boolean;
   }>;

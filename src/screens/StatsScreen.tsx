@@ -32,7 +32,9 @@ export default function StatsScreen({ navigation }: Props) {
         const failed = items.filter((p) => effectiveStatus(p, today) === "failed").length;
         const missed = items.filter((p) => effectiveStatus(p, today) === "missed").length;
         const resolved = done + failed + missed;
-        const score = resolved > 0 ? done / resolved : 0;
+        // "failed" no es un cero: es que lo hiciste pero sin llegar al
+        // objetivo, así que cuenta con crédito parcial.
+        const score = resolved > 0 ? (done + failed * 0.5) / resolved : 0;
         return { cat, total: items.length, done, failed, missed, score };
       })
       .sort((a, b) => b.total - a.total);
@@ -63,7 +65,7 @@ export default function StatsScreen({ navigation }: Props) {
             </View>
             <ProgressBar value={score} gradient={categoryGradient[cat] ?? categoryGradient.otro} />
             <Text style={styles.categoryBreakdown}>
-              ✅ {done} hechas · 🟠 {failed} intentadas · – {missed} perdidas · {total} en total
+              ✅ {done} al objetivo · 🟡 {failed} sin llegar · – {missed} perdidas · {total} en total
             </Text>
           </GlassCard>
         </Pressable>

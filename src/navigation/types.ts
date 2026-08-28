@@ -11,6 +11,7 @@ export type RootStackParamList = {
   CategoryStats: { category: PlanCategory };
   GoalStats: { goalId: string };
   SubjectStats: { area: "ingles" | "instituto"; subject?: string };
+  ExportSummary: undefined;
 };
 
 export type MainTabKey = "home" | "agenda" | "notes" | "stats" | "settings";

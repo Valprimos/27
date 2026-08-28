@@ -27,7 +27,8 @@ export default function CategoryStatsScreen({ route, navigation }: Props) {
   const failed = resolved.filter((i) => effectiveStatus(i) === "failed").length;
   const missed = resolved.filter((i) => effectiveStatus(i) === "missed").length;
   const upcoming = items.length - resolved.length;
-  const score = resolved.length > 0 ? done / resolved.length : 0;
+  // "failed" = lo hiciste pero sin llegar al objetivo, no es un cero.
+  const score = resolved.length > 0 ? (done + failed * 0.5) / resolved.length : 0;
 
   const byMonth = useMemo(() => {
     const map = new Map<string, { done: number; failed: number; missed: number; total: number }>();
@@ -58,8 +59,8 @@ export default function CategoryStatsScreen({ route, navigation }: Props) {
 
       <View style={styles.summaryRow}>
         <SummaryTile label="Éxito" value={`${Math.round(score * 100)}%`} gradient={gradient} />
-        <SummaryTile label="Hechas" value={String(done)} gradient={["#34d399", "#059669"] as const} />
-        <SummaryTile label="Intentadas" value={String(failed)} gradient={["#fca5a5", "#ef4444"] as const} />
+        <SummaryTile label="Al objetivo" value={String(done)} gradient={["#34d399", "#059669"] as const} />
+        <SummaryTile label="Sin llegar" value={String(failed)} gradient={["#fcd34d", "#d97706"] as const} />
         <SummaryTile label="Perdidas" value={String(missed)} gradient={["#94a3b8", "#475569"] as const} />
       </View>
       {upcoming > 0 && <Text style={styles.upcomingText}>+ {upcoming} programadas para más adelante</Text>}
@@ -96,11 +97,11 @@ export default function CategoryStatsScreen({ route, navigation }: Props) {
             <GlassCard key={month} accentGradient={gradient} style={styles.monthCard}>
               <View style={styles.monthHeaderRow}>
                 <Text style={styles.monthLabel}>{month}</Text>
-                <Text style={styles.monthScore}>{Math.round((m.done / m.total) * 100)}%</Text>
+                <Text style={styles.monthScore}>{Math.round(((m.done + m.failed * 0.5) / m.total) * 100)}%</Text>
               </View>
-              <ProgressBar value={m.done / m.total} gradient={gradient} />
+              <ProgressBar value={(m.done + m.failed * 0.5) / m.total} gradient={gradient} />
               <Text style={styles.monthBreakdown}>
-                ✅ {m.done} · 🟠 {m.failed} · – {m.missed} · {m.total} en total
+                ✅ {m.done} al objetivo · 🟡 {m.failed} sin llegar · – {m.missed} perdidas · {m.total} en total
               </Text>
             </GlassCard>
           ))}

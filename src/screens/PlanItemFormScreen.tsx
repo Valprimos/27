@@ -4,6 +4,7 @@ import { useApp } from "@/context/AppContext";
 import { PlanCategory } from "@/types";
 import { GradientButton } from "@/components/GradientButton";
 import { confirmAsync } from "@/utils/confirm";
+import { KeyboardAvoidingScreen } from "@/components/KeyboardAvoidingScreen";
 import { categoryGradient, colors } from "@/theme";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
@@ -71,7 +72,8 @@ export default function PlanItemFormScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }}>
+    <KeyboardAvoidingScreen>
+    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }} keyboardShouldPersistTaps="handled">
       <Text style={styles.label}>Fecha (AAAA-MM-DD)</Text>
       <TextInput
         style={styles.input}
@@ -147,6 +149,7 @@ export default function PlanItemFormScreen({ route, navigation }: Props) {
         </Pressable>
       )}
     </ScrollView>
+    </KeyboardAvoidingScreen>
   );
 }
 

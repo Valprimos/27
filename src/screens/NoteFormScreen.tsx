@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, Pressable, Alert } from 
 import { useApp } from "@/context/AppContext";
 import { NoteArea } from "@/types";
 import { GradientButton } from "@/components/GradientButton";
+import { KeyboardAvoidingScreen } from "@/components/KeyboardAvoidingScreen";
 import { AREA_LABEL, areaGradient, colors } from "@/theme";
 import { todayISODate } from "@/utils/dates";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -68,7 +69,8 @@ export default function NoteFormScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }}>
+    <KeyboardAvoidingScreen>
+    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }} keyboardShouldPersistTaps="handled">
       <Text style={styles.label}>Título</Text>
       <TextInput
         style={styles.input}
@@ -185,6 +187,7 @@ export default function NoteFormScreen({ route, navigation }: Props) {
         style={{ marginTop: 20 }}
       />
     </ScrollView>
+    </KeyboardAvoidingScreen>
   );
 }
 

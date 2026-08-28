@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView, Pressable } from "react-native";
 import { useApp } from "@/context/AppContext";
 import { GlassCard } from "@/components/GlassCard";
+import { KeyboardAvoidingScreen } from "@/components/KeyboardAvoidingScreen";
 import { colors, gradients } from "@/theme";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
@@ -15,7 +16,8 @@ export default function SettingsScreen({ navigation }: Props) {
   const [userName, setUserName] = useState(settings.userName ?? "");
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }}>
+    <KeyboardAvoidingScreen>
+    <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 60 }} keyboardShouldPersistTaps="handled">
       <Text style={styles.header}>Ajustes</Text>
 
       <Text style={styles.label}>Tu nombre</Text>
@@ -44,6 +46,15 @@ export default function SettingsScreen({ navigation }: Props) {
         </GlassCard>
       </Pressable>
 
+      <Pressable onPress={() => navigation.navigate("ExportSummary")} style={{ marginTop: 12 }}>
+        <GlassCard accentGradient={gradients.red}>
+          <Text style={styles.rowTitle}>📤 Exportar resumen para Claude</Text>
+          <Text style={styles.rowHint}>
+            Elige un tramo de fechas y genera un texto para pegarle a Claude, contándole cómo te ha ido.
+          </Text>
+        </GlassCard>
+      </Pressable>
+
       <Text style={styles.header}>Acerca de</Text>
       <GlassCard accentGradient={gradients.purple}>
         <Text style={styles.aboutText}>
@@ -53,6 +64,7 @@ export default function SettingsScreen({ navigation }: Props) {
         </Text>
       </GlassCard>
     </ScrollView>
+    </KeyboardAvoidingScreen>
   );
 }
 

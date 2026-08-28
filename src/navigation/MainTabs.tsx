@@ -8,7 +8,7 @@ import AgendaScreen from "@/screens/AgendaScreen";
 import NotesScreen from "@/screens/NotesScreen";
 import StatsScreen from "@/screens/StatsScreen";
 import SettingsScreen from "@/screens/SettingsScreen";
-import { colors, gradients } from "@/theme";
+import { colors, gradients, tabGradient } from "@/theme";
 
 const TABS: { key: MainTabKey; label: string; icon: string }[] = [
   { key: "home", label: "Hoy", icon: "🏠" },
@@ -37,12 +37,17 @@ export default function MainTabs({ navigation }: Props) {
       <View style={styles.tabBarWrapper}>
         <LinearGradient colors={gradients.header} style={StyleSheet.absoluteFill} />
         <View style={styles.tabBar}>
-          {TABS.map((t) => (
-            <Pressable key={t.key} style={styles.tabItem} onPress={() => setTab(t.key)}>
-              <Text style={[styles.tabIcon, tab === t.key && styles.tabIconActive]}>{t.icon}</Text>
-              <Text style={[styles.tabLabel, tab === t.key && styles.tabLabelActive]}>{t.label}</Text>
-            </Pressable>
-          ))}
+          {TABS.map((t) => {
+            const active = tab === t.key;
+            const accent = tabGradient[t.key][1];
+            return (
+              <Pressable key={t.key} style={styles.tabItem} onPress={() => setTab(t.key)}>
+                {active && <View style={[styles.activePill, { backgroundColor: `${accent}33` }]} />}
+                <Text style={[styles.tabIcon, active && { opacity: 1 }]}>{t.icon}</Text>
+                <Text style={[styles.tabLabel, active && { color: accent, fontWeight: "800" }]}>{t.label}</Text>
+              </Pressable>
+            );
+          })}
         </View>
       </View>
     </View>
@@ -60,8 +65,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   tabItem: { flex: 1, alignItems: "center", gap: 3 },
-  tabIcon: { fontSize: 19, opacity: 0.45 },
-  tabIconActive: { opacity: 1 },
+  activePill: {
+    position: "absolute",
+    top: -6,
+    width: "70%",
+    height: 34,
+    borderRadius: 14,
+  },
+  tabIcon: { fontSize: 19, opacity: 0.5 },
   tabLabel: { color: colors.textFaint, fontSize: 10 },
-  tabLabelActive: { color: colors.text, fontWeight: "700" },
 });

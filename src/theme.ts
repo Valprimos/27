@@ -20,10 +20,22 @@ export const gradients = {
   purple: ["#c084fc", "#7c3aed"] as const,
   pink: ["#fb7185", "#db2777"] as const,
   orange: ["#fbbf24", "#ea580c"] as const,
+  amber: ["#fcd34d", "#d97706"] as const,
+  red: ["#fb7185", "#b91c1c"] as const,
   cyan: ["#67e8f9", "#0891b2"] as const,
   money: ["#facc15", "#f97316"] as const,
   header: ["#1d2540", "#0d1220"] as const,
   glass: ["rgba(255,255,255,0.09)", "rgba(255,255,255,0.02)"] as const,
+};
+
+// Identidad de color de cada pestaña principal (para la barra inferior y los
+// acentos generales de esa sección).
+export const tabGradient = {
+  home: gradients.blue,
+  agenda: gradients.red,
+  notes: gradients.green,
+  stats: gradients.purple,
+  settings: gradients.cyan,
 };
 
 export const categoryGradient: Record<string, readonly [string, string]> = {
@@ -56,10 +68,13 @@ export const AREA_LABEL: Record<string, string> = {
   otro: "Otro",
 };
 
+// "failed" no es un fallo: significa que lo hiciste, pero sin llegar al
+// tiempo/objetivo marcado (ej. corriste los 400m pero en más tiempo del
+// que buscabas). "missed" es lo único que de verdad se pierde: no se hizo.
 export const STATUS_META: Record<string, { icon: string; label: string; color: string }> = {
   pending: { icon: "", label: "Pendiente", color: colors.textFaint },
   done: { icon: "✓", label: "Hecho", color: "#34d399" },
-  failed: { icon: "✗", label: "Intentado, no conseguido", color: "#f87171" },
+  failed: { icon: "~", label: "Hecho, sin llegar al objetivo", color: "#fbbf24" },
   missed: { icon: "–", label: "Perdido (no se hizo ese día)", color: "#64748b" },
 };
 

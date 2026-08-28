@@ -34,12 +34,20 @@ export default function AgendaScreen({ navigation }: Props) {
     <View style={{ flex: 1 }}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Calendario</Text>
-        <GradientButton
-          label="+ Añadir"
-          gradient={gradients.purple}
-          onPress={() => navigation.navigate("PlanItemForm", { date: today })}
-          style={{ minWidth: 110 }}
-        />
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <GradientButton
+            label="📤"
+            gradient={gradients.purple}
+            onPress={() => navigation.navigate("ExportSummary")}
+            style={{ minWidth: 46 }}
+          />
+          <GradientButton
+            label="+ Añadir"
+            gradient={gradients.red}
+            onPress={() => navigation.navigate("PlanItemForm", { date: today })}
+            style={{ minWidth: 110 }}
+          />
+        </View>
       </View>
 
       <SectionList

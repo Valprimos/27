@@ -41,13 +41,13 @@ export default function HomeScreen({ navigation }: Props) {
       <Text style={styles.greeting}>{settings.userName ? `Hola, ${settings.userName} 👋` : "Hoy"}</Text>
       <Text style={styles.headerText}>
         {doneTasks}/{totalTasks || 0} completados hoy
-        {failedTasks > 0 ? ` (${failedTasks} intentado${failedTasks > 1 ? "s" : ""})` : ""}
+        {failedTasks > 0 ? ` (${failedTasks} sin llegar al objetivo)` : ""}
       </Text>
 
       <View style={styles.quickRow}>
         <GradientButton
           label="+ Añadir al calendario"
-          gradient={gradients.purple}
+          gradient={gradients.red}
           style={{ flex: 1 }}
           onPress={() => navigation.navigate("PlanItemForm", { date: today })}
         />
