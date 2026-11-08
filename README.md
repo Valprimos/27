@@ -2,6 +2,10 @@
 
 Aplicación personal para registrar hábitos, formación elegida por ti, notas académicas y experiencias puntuales. Los cuatro ámbitos mantienen historiales y estadísticas separados.
 
+## Abrir la app
+
+La versión web está disponible en [27 — A tu ritmo](https://valprimos.github.io/27/). También puedes instalarla desde el navegador del móvil como una app web progresiva (PWA).
+
 ## Ejecutar en Mac
 
 La aplicación no necesita instalar paquetes ni usar una cuenta. Desde la carpeta del proyecto, inicia un servidor local:
@@ -15,12 +19,12 @@ Abre <http://localhost:8000> en el navegador. La primera carga necesita conexió
 ## Datos y privacidad
 
 - Los registros se guardan en el almacenamiento local del navegador de cada dispositivo.
-- No se envían a este repositorio ni a un servidor de 27.
+- La app no envía tus registros a GitHub ni a un servidor de 27. GitHub puede recibir solicitudes normales de carga de la página y sus archivos.
 - Usa **Configuración → Exportar todos mis datos** para hacer copias o mover datos entre dispositivos; importar sustituye los datos locales actuales.
 - Esta versión no sincroniza automáticamente con iCloud. La aplicación informa de los requisitos de CloudKit JS en Configuración.
-- El código fuente está en un repositorio privado. La app no se ha publicado en GitHub Pages.
+- El código fuente y los documentos del repositorio son públicos; no guardes secretos ni datos personales aquí.
 
-Para instalarla desde Safari en iPhone como PWA, debe servirse desde una dirección HTTPS. La instalación no se activa al abrir el archivo directamente. Si se publica en algún sitio, la web publicada debe tratarse como accesible públicamente aunque el repositorio sea privado.
+El sitio se sirve por HTTPS. En iPhone, ábrelo en Safari y usa **Compartir → Añadir a pantalla de inicio**. En Android, abre el enlace en Chrome y selecciona **Instalar app** o **Añadir a pantalla de inicio**.
 
 ## Funciones incluidas
 
@@ -29,7 +33,7 @@ Para instalarla desde Safari en iPhone como PWA, debe servirse desde una direcci
 - Asignaturas y notas de exámenes y evaluaciones, medias normalizadas sobre 10 y evolución por asignatura.
 - Extras editables que no afectan a hábitos, rachas ni porcentaje diario.
 - Calendario, ánimo, reflexiones con guardado automático, objetivos, curiosidades con fuentes, estadísticas basadas en registros y copias JSON.
-- Diseño adaptable a Mac y iPhone, manifest PWA y caché local de la interfaz.
+- Diseño adaptable a Mac y móvil, manifest PWA, protección de contenido y caché local de la interfaz.
 
 ## Especificación
 
