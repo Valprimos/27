@@ -4,7 +4,7 @@ Aplicación personal para registrar hábitos, formación elegida por ti, notas a
 
 ## Abrir la app
 
-La versión web está disponible en [27 — A tu ritmo](https://valprimos.github.io/27/). También puedes instalarla desde el navegador del móvil como una app web progresiva (PWA).
+La versión web está disponible en [27 — A tu ritmo](https://valprimos.github.io/27/index.html). También puedes instalarla desde el navegador del móvil como una app web progresiva (PWA).
 
 ## Ejecutar en Mac
 
