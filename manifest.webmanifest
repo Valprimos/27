@@ -1,9 +1,9 @@
 {
-  "name": "27 — A tu ritmo",
+  "name": "27",
   "short_name": "27",
-  "description": "Hábitos, aprendizaje, estudios y experiencias personales.",
+  "description": "Hábitos, formación, estudios y experiencias personales.",
   "lang": "es",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f3f5f2",

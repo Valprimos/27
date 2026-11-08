@@ -12,4 +12,4 @@ Apple ofrece CloudKit JS para sitios web. Requiere un contenedor CloudKit existe
 
 ## Publicación
 
-La PWA puede instalarse desde un origen HTTPS. Este repositorio es privado y la publicación de una web no está habilitada. La privacidad del código no vuelve privada una web publicada. Antes de publicar habrá que decidir el alojamiento y actualizar la base URL de la PWA si se sirve desde una subruta.
+La app se publica en GitHub Pages desde la raíz de `main`, en `https://valprimos.github.io/27/`, y se sirve mediante HTTPS. El repositorio y sus documentos son públicos. Los registros de uso siguen guardándose localmente en cada navegador y no se publican con el código.

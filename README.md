@@ -1,10 +1,10 @@
-# 27 — A tu ritmo
+# 27
 
 Aplicación personal para registrar hábitos, formación elegida por ti, notas académicas y experiencias puntuales. Los cuatro ámbitos mantienen historiales y estadísticas separados.
 
 ## Abrir la app
 
-La versión web está disponible en [27 — A tu ritmo](https://valprimos.github.io/27/index.html). También puedes instalarla desde el navegador del móvil como una app web progresiva (PWA).
+La versión web está disponible en [Abrir 27](https://valprimos.github.io/27/index.html). También puedes instalarla desde el navegador del móvil como una app web progresiva (PWA).
 
 ## Ejecutar en Mac
 
@@ -32,8 +32,8 @@ El sitio se sirve por HTTPS. En iPhone, ábrelo en Safari y usa **Compartir → 
 - Registro independiente de sesiones en Matemáticas personal, Inglés personal, Python y otras áreas.
 - Asignaturas y notas de exámenes y evaluaciones, medias normalizadas sobre 10 y evolución por asignatura.
 - Extras editables que no afectan a hábitos, rachas ni porcentaje diario.
-- Calendario, ánimo, reflexiones con guardado automático, objetivos, curiosidades con fuentes, estadísticas basadas en registros y copias JSON.
-- Diseño adaptable a Mac y móvil, manifest PWA, protección de contenido y caché local de la interfaz.
+- Calendario, ánimo, reflexiones con guardado automático, objetivos, citas con autor y obra, estadísticas basadas en registros y copias JSON.
+- Diseño adaptable a Mac y móvil, modos claro, oscuro y sistema, manifest PWA y caché local de la interfaz.
 
 ## Especificación
 

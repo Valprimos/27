@@ -5,17 +5,17 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f3f5f2" />
-    <meta name="description" content="27: hábitos, formación, estudios y experiencias, a tu ritmo." />
+    <meta name="description" content="27: hábitos, formación, estudios y experiencias personales." />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <link rel="stylesheet" href="./src/styles.css" />
-    <title>27 — A tu ritmo</title>
+    <title>27</title>
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar" id="sidebar">
-        <a class="brand" href="#hoy" aria-label="27, ir a hoy"><span class="brand-mark">27</span><span><b>mi espacio</b><small>crece a tu ritmo</small></span></a>
+        <a class="brand" href="#hoy" aria-label="27, ir a hoy"><span class="brand-mark" aria-hidden="true"><img src="./icons/icon.svg" alt="" /></span><span><b>27</b><small>Hábitos · aprendizaje</small></span></a>
         <nav class="main-nav" aria-label="Navegación principal">
           <p class="nav-label">MI DÍA</p>
           <button class="nav-item active" data-view="today"><span>◷</span> Hoy</button>
@@ -30,14 +30,14 @@
           <button class="nav-item" data-view="statistics"><span>⌁</span> Estadísticas</button>
           <button class="nav-item" data-view="settings"><span>⚙</span> Configuración</button>
         </nav>
-        <div class="sidebar-note"><span class="note-spark">✦</span><p>No hace falta hacerlo todo.<br /><b>Solo sigue siendo tuyo.</b></p></div>
-        <div class="sidebar-footer"><span class="privacy-dot"></span> Tus datos se quedan en este dispositivo</div>
+        <div class="sidebar-footer"><span class="privacy-dot"></span> Datos guardados en este dispositivo</div>
       </aside>
+      <button class="sidebar-backdrop" id="sidebar-backdrop" type="button" aria-label="Cerrar menú"></button>
       <main class="main-area">
         <header class="topbar">
-          <button class="mobile-menu" id="menu-toggle" aria-label="Abrir menú">☰</button>
+          <button class="mobile-menu" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">☰</button>
           <div class="crumb"><span id="today-date"></span><span class="crumb-dot">·</span><span id="page-crumb">Hoy</span></div>
-          <div class="top-actions"><span class="save-status" id="save-status">Guardado en este dispositivo</span><button class="avatar" data-view="settings" title="Configuración">27</button></div>
+          <div class="top-actions"><span class="save-status" id="save-status">Guardado en este dispositivo</span><button class="avatar" data-view="settings" title="Configuración" aria-label="Configuración"><img src="./icons/icon.svg" alt="" /></button></div>
         </header>
         <div class="view-root" id="view-root" aria-live="polite"></div>
       </main>
