@@ -32,8 +32,11 @@ El sitio se sirve por HTTPS. En iPhone, ábrelo en Safari y usa **Compartir → 
 - Registro independiente de sesiones en Matemáticas personal, Inglés personal, Python y otras áreas.
 - Asignaturas y notas de exámenes y evaluaciones, medias normalizadas sobre 10 y evolución por asignatura.
 - Extras editables que no afectan a hábitos, rachas ni porcentaje diario.
-- Calendario, ánimo, reflexiones con guardado automático, objetivos, citas con autor y obra, estadísticas basadas en registros y copias JSON.
-- Diseño adaptable a Mac y móvil, modos claro, oscuro y sistema, manifest PWA y caché local de la interfaz.
+- Calendario, ánimo, reflexiones con guardado automático, objetivos, estadísticas basadas en registros y copias JSON.
+- **Selector de día** en *Hoy*: tira con los últimos 14 días, flechas, calendario para fechas antiguas y aviso claro cuando registras un día pasado. No se pueden registrar días futuros.
+- **Contenido diario** que cambia cada día: cita (con autor y obra), dato curioso (con enlace para consultarlo) e inglés del día. Solo se ve el de hoy y el de días ya pasados; el archivo muestra lo que ya ha salido y tus favoritos. El contenido está en `src/contenido.js`, listo para ampliar.
+- **Apariencia** en Configuración: modo claro/oscuro/sistema, 8 paletas de color (Bosque, Océano, Atardecer, Lavanda, Rosa, Café, Turquesa, Grafito) y tres tamaños de texto.
+- Diseño adaptable a Mac y móvil, manifest PWA y caché local de la interfaz.
 
 ## Especificación
 
