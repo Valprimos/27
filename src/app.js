@@ -44,7 +44,7 @@ const seedAreas = [
 ].map(x=>({...x,id:id()}));
 const defaults = () => ({version:1,settings:{createdAt:today(),startDate:today(),installPromptDismissed:false},habits:habitSeeds,habitEntries:{},areas:seedAreas,sessions:[],subjects:[{id:id(),name:'Matemáticas'},{id:id(),name:'Inglés'}],grades:[],extras:[],extraCategories:['Cultura','Deporte','Cocina','Habilidad','Excursión','Otro'],moods:{},reflections:{},goals:[],favorites:[],customFacts:[]});
 let state = load()
-if(state.settings.design!==2){state.settings.design=2;state.settings.palette='oceano';try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}};
+if(state.settings.design!==3){if(state.settings.design===2)state.settings.palette='bosque';state.settings.design=3;try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}};
 let view = 'today';
 let focusDate = today();
 let calendarMonth = new Date();

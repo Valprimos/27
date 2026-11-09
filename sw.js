@@ -1,5 +1,5 @@
-const CACHE = '27-shell-v4';
-const FILES = ['./', './index.html', './manifest.webmanifest', './src/app.js', './src/contenido.js', './src/palettes.js', './src/styles.css', './src/temas.css', './icons/icon.svg','./fonts/barlow-latin-400-normal.woff2','./fonts/barlow-latin-500-normal.woff2','./fonts/barlow-latin-600-normal.woff2','./fonts/barlow-latin-700-normal.woff2','./fonts/barlow-condensed-latin-700-normal.woff2','./fonts/barlow-condensed-latin-800-normal.woff2', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
+const CACHE = '27-shell-v5';
+const FILES = ['./', './index.html', './manifest.webmanifest', './src/app.js', './src/contenido.js', './src/palettes.js', './src/styles.css', './src/temas.css', './icons/icon.svg','./fonts/barlow-latin-400-normal.woff2','./fonts/barlow-latin-500-normal.woff2','./fonts/barlow-latin-600-normal.woff2','./fonts/barlow-latin-700-normal.woff2','./fonts/barlow-latin-800-normal.woff2', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => { self.skipWaiting(); event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES))); });
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', event => {

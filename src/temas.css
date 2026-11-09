@@ -1,17 +1,17 @@
-/* Paletas: definen el color de acción (botones, casillas, progreso, selección). El color de cada sección es fijo (ver styles.css). */
-body[data-palette="bosque"]{--acc:#0b8f3c;--acc-ink:#fff}
-body[data-theme="dark"][data-palette="bosque"]{--acc:#2bd66b;--acc-ink:#04140a}
-body[data-palette="oceano"]{--acc:#1f4fe0;--acc-ink:#fff}
-body[data-theme="dark"][data-palette="oceano"]{--acc:#6c93ff;--acc-ink:#060d24}
-body[data-palette="atardecer"]{--acc:#d93a0b;--acc-ink:#fff}
-body[data-theme="dark"][data-palette="atardecer"]{--acc:#ff7a45;--acc-ink:#240a02}
-body[data-palette="lavanda"]{--acc:#6b2bd9;--acc-ink:#fff}
-body[data-theme="dark"][data-palette="lavanda"]{--acc:#a57bff;--acc-ink:#130626}
-body[data-palette="rosa"]{--acc:#c8167f;--acc-ink:#fff}
-body[data-theme="dark"][data-palette="rosa"]{--acc:#ff5cb8;--acc-ink:#260414}
-body[data-palette="cafe"]{--acc:#a85a00;--acc-ink:#fff}
-body[data-theme="dark"][data-palette="cafe"]{--acc:#ffb534;--acc-ink:#241500}
-body[data-palette="turquesa"]{--acc:#04788f;--acc-ink:#fff}
-body[data-theme="dark"][data-palette="turquesa"]{--acc:#2cd4f0;--acc-ink:#021c22}
-body[data-palette="grafito"]{--acc:#0b0e14;--acc-ink:#fff}
-body[data-theme="dark"][data-palette="grafito"]{--acc:#f4f6fa;--acc-ink:#0b0e14}
+/* Paletas: definen el color de acción (botones, casillas, progreso, selección) y tiñen el menú lateral. El color de cada sección es fijo (ver styles.css). */
+body[data-palette="bosque"]{--acc:#1f6b3b;--acc-ink:#fff}
+body[data-theme="dark"][data-palette="bosque"]{--acc:#4cc27a;--acc-ink:#04140a}
+body[data-palette="oceano"]{--acc:#1d5fa8;--acc-ink:#fff}
+body[data-theme="dark"][data-palette="oceano"]{--acc:#5ea2f0;--acc-ink:#05101f}
+body[data-palette="atardecer"]{--acc:#b5461b;--acc-ink:#fff}
+body[data-theme="dark"][data-palette="atardecer"]{--acc:#f08a5d;--acc-ink:#240c02}
+body[data-palette="lavanda"]{--acc:#6a3fb5;--acc-ink:#fff}
+body[data-theme="dark"][data-palette="lavanda"]{--acc:#a98af0;--acc-ink:#150a28}
+body[data-palette="rosa"]{--acc:#b02a65;--acc-ink:#fff}
+body[data-theme="dark"][data-palette="rosa"]{--acc:#f070a5;--acc-ink:#260414}
+body[data-palette="cafe"]{--acc:#7a4a22;--acc-ink:#fff}
+body[data-theme="dark"][data-palette="cafe"]{--acc:#d9a066;--acc-ink:#1f1103}
+body[data-palette="turquesa"]{--acc:#0b7f7c;--acc-ink:#fff}
+body[data-theme="dark"][data-palette="turquesa"]{--acc:#3fcfc9;--acc-ink:#021c1b}
+body[data-palette="grafito"]{--acc:#2b313a;--acc-ink:#fff}
+body[data-theme="dark"][data-palette="grafito"]{--acc:#e6e9ee;--acc-ink:#0e1114}
