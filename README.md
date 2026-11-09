@@ -36,7 +36,6 @@ El sitio se sirve por HTTPS. En iPhone, ábrelo en Safari y usa **Compartir → 
 - **Selector de día** en *Hoy*: tira con los últimos 14 días, flechas, calendario para fechas antiguas y aviso claro cuando registras un día pasado. No se pueden registrar días futuros.
 - **Contenido diario** que cambia cada día: cita (con autor y obra), dato curioso (con enlace para consultarlo) e inglés del día. Solo se ve el de hoy y el de días ya pasados; el archivo muestra lo que ya ha salido y tus favoritos. El contenido está en `src/contenido.js`, listo para ampliar.
 - **Apariencia** en Configuración: modo claro/oscuro/sistema, 8 paletas de color (Bosque, Océano, Atardecer, Lavanda, Rosa, Café, Turquesa, Grafito) y tres tamaños de texto.
-- Diseño con más contraste: cada sección tiene su propio color de acento, iconos SVG uniformes en todos los dispositivos (sin emojis sueltos) y tipografía Barlow incluida en `fonts/`.
 - Diseño adaptable a Mac y móvil, manifest PWA y caché local de la interfaz.
 
 ## Especificación

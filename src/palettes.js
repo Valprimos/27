@@ -1,11 +1,11 @@
-// Colores de vista previa de cada paleta: fondo, color de acción, menú y tono suave.
+// Generado junto con temas.css. Los colores de vista previa de cada paleta.
 export const PALETTES=[
-  {id:'bosque',name:'Bosque',light:{bg:'#e7ebe8',acc:'#1f6b3b',mid:'#111b15',quote:'#ffffff'},dark:{bg:'#0e1411',acc:'#4cc27a',mid:'#eef3ef',quote:'#17201b'}},
-  {id:'oceano',name:'Océano',light:{bg:'#e7ebe8',acc:'#1d5fa8',mid:'#111b15',quote:'#ffffff'},dark:{bg:'#0e1411',acc:'#5ea2f0',mid:'#eef3ef',quote:'#17201b'}},
-  {id:'atardecer',name:'Atardecer',light:{bg:'#e7ebe8',acc:'#b5461b',mid:'#111b15',quote:'#ffffff'},dark:{bg:'#0e1411',acc:'#f08a5d',mid:'#eef3ef',quote:'#17201b'}},
-  {id:'lavanda',name:'Lavanda',light:{bg:'#e7ebe8',acc:'#6a3fb5',mid:'#111b15',quote:'#ffffff'},dark:{bg:'#0e1411',acc:'#a98af0',mid:'#eef3ef',quote:'#17201b'}},
-  {id:'rosa',name:'Rosa',light:{bg:'#e7ebe8',acc:'#b02a65',mid:'#111b15',quote:'#ffffff'},dark:{bg:'#0e1411',acc:'#f070a5',mid:'#eef3ef',quote:'#17201b'}},
-  {id:'cafe',name:'Café',light:{bg:'#e7ebe8',acc:'#7a4a22',mid:'#111b15',quote:'#ffffff'},dark:{bg:'#0e1411',acc:'#d9a066',mid:'#eef3ef',quote:'#17201b'}},
-  {id:'turquesa',name:'Turquesa',light:{bg:'#e7ebe8',acc:'#0b7f7c',mid:'#111b15',quote:'#ffffff'},dark:{bg:'#0e1411',acc:'#3fcfc9',mid:'#eef3ef',quote:'#17201b'}},
-  {id:'grafito',name:'Grafito',light:{bg:'#e7ebe8',acc:'#2b313a',mid:'#111b15',quote:'#ffffff'},dark:{bg:'#0e1411',acc:'#e6e9ee',mid:'#eef3ef',quote:'#17201b'}},
+  {id:'bosque',name:'Bosque',light:{bg:'#f3f5f2',acc:'#344c3c',mid:'#77946d',quote:'#f1eee6'},dark:{bg:'#171d1a',acc:'#56775d',mid:'#8fb08a',quote:'#282a24'}},
+  {id:'oceano',name:'Océano',light:{bg:'#f0f4f7',acc:'#295c8e',mid:'#5285b7',quote:'#e7e8f3'},dark:{bg:'#11161a',acc:'#3f668d',mid:'#668cb2',quote:'#23232c'}},
+  {id:'atardecer',name:'Atardecer',light:{bg:'#f7f2f0',acc:'#954523',mid:'#be6e4c',quote:'#f3f0e7'},dark:{bg:'#1a1411',acc:'#92543a',mid:'#b77b62',quote:'#2c2a23'}},
+  {id:'lavanda',name:'Lavanda',light:{bg:'#f3f1f6',acc:'#523781',mid:'#7b60a9',quote:'#f1e7f3'},dark:{bg:'#151219',acc:'#5e4983',mid:'#8571a8',quote:'#2b232c'}},
+  {id:'rosa',name:'Rosa',light:{bg:'#f7f0f3',acc:'#8a2e53',mid:'#b2577b',quote:'#f3e8e7'},dark:{bg:'#1a1115',acc:'#8a425f',mid:'#af6a85',quote:'#2c2323'}},
+  {id:'cafe',name:'Café',light:{bg:'#f6f3f1',acc:'#7f5939',mid:'#a78262',quote:'#f3f2e7'},dark:{bg:'#191512',acc:'#81644b',mid:'#a68b72',quote:'#2c2c23'}},
+  {id:'turquesa',name:'Turquesa',light:{bg:'#f0f7f7',acc:'#227774',mid:'#52b7b4',quote:'#e7eef3'},dark:{bg:'#111a1a',acc:'#387f7d',mid:'#66b2b0',quote:'#23282c'}},
+  {id:'grafito',name:'Grafito',light:{bg:'#f3f3f4',acc:'#464a53',mid:'#7d828c',quote:'#ececee'},dark:{bg:'#151516',acc:'#60646c',mid:'#878a92',quote:'#262629'}},
 ];
