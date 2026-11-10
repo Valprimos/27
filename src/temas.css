@@ -142,3 +142,95 @@ body[data-size="xl"] .app-dialog{zoom:1.2}
   .palette-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .day-tools .btn{flex:none}
 }
+
+/* Refinos de contraste y definición. Usan las variables de cada paleta, así que se adaptan a todas y al modo oscuro. */
+body:not(#_){--mid:color-mix(in srgb,var(--ink) 70%,var(--paper));--edge:color-mix(in srgb,var(--line) 78%,var(--ink));--edge2:color-mix(in srgb,var(--line) 52%,var(--ink))}
+body:not(#_),body:not(#_) .app-shell,body:not(#_) .main-area{background:color-mix(in srgb,var(--bg) 93%,var(--ink))}
+body:not(#_) .ic{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:-.18em}
+body:not(#_) .ic-play{fill:currentColor}
+body:not(#_) .fav-btn.saved .ic,body:not(#_) .quote-fav.saved .ic{fill:currentColor}
+body:not(#_) .quote-fav{display:grid;place-items:center}
+body:not(#_) .quote-fav .ic{width:21px;height:21px}
+body:not(#_) .fav-btn .ic{width:18px;height:18px}
+body:not(#_) .sidebar{border-color:var(--edge)}
+body:not(#_) .topbar{border-bottom-color:var(--edge)}
+body:not(#_) .sidebar-footer{font-size:11.5px;color:var(--mid)}
+body:not(#_) .brand small{font-size:12px;color:var(--mid)}
+body:not(#_) .nav-label{font-size:10.5px;color:var(--mid)}
+body:not(#_) .nav-item{font-size:14px;font-weight:600;color:var(--ink)}
+body:not(#_) .nav-item span{display:grid;place-items:center;font-size:18px;color:var(--mid)}
+body:not(#_) .nav-item:hover{background:var(--acc-soft)}
+body:not(#_) .nav-item.active{background:var(--acc);color:#fff}
+body:not(#_) .nav-item.active span{color:#fff}
+body:not(#_) .crumb{font-size:13px;color:var(--mid)}
+body:not(#_) .crumb span:last-child{color:var(--ink);font-weight:700}
+body:not(#_) .crumb-dot{color:var(--edge2)}
+body:not(#_) .mobile-menu .ic{width:22px;height:22px}
+body:not(#_) .page-head{padding-bottom:20px;border-bottom:1px solid var(--edge)}
+body:not(#_) .eyebrow{display:inline-block;font-size:11px;color:var(--acc-ink);background:var(--acc-soft);padding:4px 10px;border-radius:99px;margin-bottom:12px}
+body:not(#_) .hero-card .eyebrow{background:rgba(255,255,255,.16);color:#eaf1e8}
+body:not(#_) .page-head h1{font-weight:800}
+body:not(#_) .page-head .sub{font-size:14px;color:var(--mid)}
+body:not(#_) .date-pill{font-size:13px;font-weight:600;color:var(--ink);border-color:var(--edge)}
+body:not(#_) .btn{font-size:13px;font-weight:700}
+body:not(#_) .btn:not(.soft):not(.line):not(.danger){box-shadow:0 2px 0 rgba(0,0,0,.22)}
+body:not(#_) .btn.soft{background:var(--acc-soft2);color:var(--acc-ink)}
+body:not(#_) .btn.line{border-color:var(--edge2);color:var(--ink)}
+body:not(#_) .btn.small{font-size:12px}
+body:not(#_) .link-button{font-size:12.5px;font-weight:700;color:var(--acc-ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--acc-mid)}
+body:not(#_) .icon-button{background:var(--acc-soft);color:var(--acc-ink);width:32px;height:32px;display:inline-grid;place-items:center;font-size:15px}
+body:not(#_) .icon-button .ic{width:16px;height:16px}
+body:not(#_) .card{border-color:var(--edge);box-shadow:0 1px 2px rgba(20,35,25,.10),0 10px 26px rgba(20,35,25,.07)}
+body[data-theme="dark"]:not(#_) .card{box-shadow:0 10px 26px rgba(0,0,0,.35)}
+body:not(#_) .card:not(.hero-card):not(.quote-card){border-top:3px solid var(--acc-mid)}
+body:not(#_) .card-title{font-size:15px;font-weight:800}
+body:not(#_) .section-head h2{font-size:16px;font-weight:800;display:flex;align-items:center;gap:9px}
+body:not(#_) .section-head h2::before{content:"";width:4px;height:16px;border-radius:2px;background:var(--acc-mid);flex:none}
+body:not(#_) .section-head p,body:not(#_) .card-sub{font-size:12.5px;color:var(--mid)}
+body:not(#_) .hero-card p{font-size:13.5px}
+body:not(#_) .empty{font-size:13.5px;color:var(--mid);border:1.5px dashed var(--edge);border-radius:12px}
+body:not(#_) .empty strong{font-size:14.5px;color:var(--ink)}
+body:not(#_) .footer-note,body:not(#_) .helper-text,body:not(#_) .form-hint{font-size:12.5px;color:var(--mid)}
+body:not(#_) .metric .metric-label{font-size:12px;font-weight:700;color:var(--mid)}
+body:not(#_) .metric strong{font-size:30px;font-weight:800}
+body:not(#_) .metric small{font-size:11.5px;color:var(--mid)}
+body:not(#_) .metric-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--acc-soft);color:var(--acc-ink);font-size:18px}
+body:not(#_) .habit-row,body:not(#_) .list-row{border-bottom-color:var(--line)}
+body:not(#_) .habit-name{font-size:14px;font-weight:700;color:var(--ink)}
+body:not(#_) .habit-meta{font-size:12px;color:var(--mid)}
+body:not(#_) .check{width:22px;height:22px;border:2px solid var(--edge2);border-radius:7px}
+body:not(#_) .check:checked:after{content:"";left:6px;top:1.5px;width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);font-size:0}
+body:not(#_) .tag:not(.good):not(.warn):not(.bad){font-size:11px;font-weight:600;padding:4px 10px;background:var(--acc-soft);color:var(--acc-ink)}
+body:not(#_) .list-main strong{font-size:14px;color:var(--ink)}
+body:not(#_) .list-main small{font-size:12px;color:var(--mid)}
+body:not(#_) .tab{font-size:12.5px;color:var(--mid)}
+body:not(#_) .tab.active{background:var(--acc);color:#fff;box-shadow:none}
+body:not(#_) .pill{font-size:12px;color:var(--ink);border-color:var(--edge2)}
+body:not(#_) .pill.active{background:var(--acc);border-color:var(--acc);color:#fff}
+body:not(#_) .field,body:not(#_) select,body:not(#_) textarea,body:not(#_) input:not([type=checkbox]):not([type=radio]){font-size:14px;border:1.5px solid var(--edge2);border-radius:10px;font-family:inherit;background:var(--field);color:var(--ink)}
+body:not(#_) .mood-option{font-size:12px;color:var(--ink);border-color:var(--edge2)}
+body:not(#_) .mood-option.active{border-color:var(--acc);background:var(--acc-soft2)}
+body:not(#_) .callout{font-size:13px}
+body:not(#_) .calendar-dow{font-size:11.5px;font-weight:700;color:var(--mid)}
+body:not(#_) .calendar-day{font-size:12px;font-weight:600;border-color:var(--line);color:var(--ink)}
+body:not(#_) .calendar-day.selected{outline-color:var(--acc);background:var(--acc-soft2)}
+body:not(#_) .calendar-day .day-dot{width:7px;height:7px;background:var(--acc)}
+body:not(#_) .calendar-day .day-dot.multiple{width:16px}
+body:not(#_) .day-chip{border-color:var(--edge)}
+body:not(#_) .bar{background:var(--acc-mid)}
+body:not(#_) .bar-label{font-size:11px;color:var(--mid)}
+body:not(#_) .progress-track{height:9px}
+body:not(#_) .data-table{font-size:13px}
+body:not(#_) .data-table th{font-size:11.5px;color:var(--mid)}
+body:not(#_) .data-table td{color:var(--ink);border-bottom-color:var(--line)}
+body:not(#_) .quote-card .quote-type{font-size:10.5px}
+body:not(#_) .quote-author{font-size:13px!important}
+body:not(#_) .quote-author span{font-size:12px}
+body:not(#_) .quote-card .quote-source,body:not(#_) .quote-history-item a{font-size:12px}
+@media(max-width:760px){
+body:not(#_) .metric strong{font-size:26px}
+body:not(#_) .calendar-day{font-size:11px}
+body:not(#_) .field,body:not(#_) select,body:not(#_) textarea,body:not(#_) input:not([type=checkbox]):not([type=radio]){font-size:16px}
+body:not(#_) .page-head{padding-bottom:16px}
+body:not(#_) .section-head h2{font-size:15px}
+}
