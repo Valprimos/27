@@ -243,3 +243,9 @@ body:not(#_) .day-prod{position:absolute;top:5px;right:5px;width:17px;height:17p
 body:not(#_) .day-prod .ic{width:10px;height:10px;stroke-width:3.4;vertical-align:0}
 body:not(#_) .cal-legend{margin:14px 0 0}
 body:not(#_) .cal-legend .day-prod{position:static;display:inline-grid;vertical-align:middle;margin-right:6px}
+
+/* Sincronización */
+body:not(#_) .sync-card{margin-bottom:18px}
+body:not(#_) .sync-steps{margin:12px 0 16px;padding-left:20px;font-size:13.5px;line-height:1.65;color:var(--mid)}
+body:not(#_) .sync-steps a{color:var(--acc-ink);font-weight:700}
+body:not(#_) .form-error{color:var(--bad,#b3402a);font-size:13px;min-height:1em;margin:10px 0 0}
