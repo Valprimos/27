@@ -21,6 +21,7 @@ Abre <http://localhost:8000> en el navegador. La primera carga necesita conexió
 - Los registros se guardan en el almacenamiento local del navegador de cada dispositivo.
 - La app no envía tus registros a GitHub ni a un servidor de 27. GitHub puede recibir solicitudes normales de carga de la página y sus archivos.
 - Usa **Configuración → Exportar todos mis datos** para hacer copias o mover datos entre dispositivos; importar sustituye los datos locales actuales.
+- Repaso: juego de preguntas sobre las citas, datos curiosos y palabras de inglés que van saliendo (autor de una cita, completar citas y datos, significado y uso de las palabras). Prioriza lo que nunca se ha respondido o se ha fallado, y marca como dominado lo que se acierta 3 veces seguidas. Código en `src/quiz.js`.
 - Sincronización entre dispositivos (opcional, gratis): guarda los datos cifrados en un repositorio privado de GitHub. Se activa en Configuración → Sincronización.
   1. Crea un repositorio **privado** para los datos (por ejemplo `27-datos`, con README).
   2. Crea un token de acceso fine-grained limitado a ese repositorio con el permiso *Contents: Read and write*.

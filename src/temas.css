@@ -279,3 +279,24 @@ body[data-theme="dark"]:not(#_) .pd.low{background:#6b5320;color:#fbe9bd}
 body:not(#_) .pd.none{border:1.5px dashed var(--edge2);color:var(--mid)}
 body:not(#_) .legend-none{display:inline-block;width:14px;height:14px;border:1.5px dashed var(--edge2);border-radius:4px;vertical-align:middle}
 @media(max-width:760px){body:not(#_) .prod-strip{grid-template-columns:repeat(7,minmax(0,1fr))}}
+
+/* Repaso (juego de preguntas) */
+body:not(#_) .quiz-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--mid)}
+body:not(#_) .quiz-bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:6px}
+body:not(#_) .quiz-bar>span{display:block;height:100%;background:var(--acc);border-radius:99px;transition:width .25s}
+body:not(#_) .quiz-q{margin:14px 0 4px;font-size:19px;font-weight:700;line-height:1.35}
+body:not(#_) .quiz-quote{margin:10px 0 0;padding:12px 14px;border-left:4px solid var(--acc-mid);background:var(--acc-soft);border-radius:10px;font-size:16px;line-height:1.5}
+body:not(#_) .quiz-options{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+body:not(#_) .quiz-option{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border:1.5px solid var(--edge2);background:var(--paper);color:var(--ink);border-radius:12px;font:600 15px/1.35 inherit;cursor:pointer}
+body:not(#_) .quiz-option b{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--acc-soft);color:var(--acc-ink);font-size:13px}
+body:not(#_) .quiz-option:hover:not(:disabled){border-color:var(--acc)}
+body:not(#_) .quiz-option:disabled{cursor:default}
+body:not(#_) .quiz-option.correct{border-color:#2f8f4e;background:color-mix(in srgb,#2f8f4e 14%,var(--paper))}
+body:not(#_) .quiz-option.correct b{background:#2f8f4e;color:#fff}
+body:not(#_) .quiz-option.wrong{border-color:#c0452f;background:color-mix(in srgb,#c0452f 12%,var(--paper))}
+body:not(#_) .quiz-option.wrong b{background:#c0452f;color:#fff}
+body:not(#_) .quiz-explain{margin-top:18px;padding:14px;border-radius:12px;border:1.5px solid var(--edge);background:color-mix(in srgb,var(--bg) 60%,var(--paper));font-size:14px;line-height:1.5}
+body:not(#_) .quiz-explain .quote-history-item{border:0;padding:0;margin-top:10px}
+body:not(#_) .q-good{color:#2f8f4e}body:not(#_) .q-bad{color:#c0452f}
+body:not(#_) .quiz-score{font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1}
+body:not(#_) .quiz-score small{font-size:28px;color:var(--mid);font-weight:700}

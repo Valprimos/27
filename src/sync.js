@@ -10,7 +10,7 @@ const API = 'https://api.github.com';
 const ITER = 250000;
 const TOMBSTONE_DAYS = 400;
 
-const ID_BUCKETS = ['habits', 'areas', 'sessions', 'subjects', 'grades', 'extras', 'goals', 'books', 'customFacts', 'tasks'];
+const ID_BUCKETS = ['habits', 'areas', 'sessions', 'subjects', 'grades', 'extras', 'goals', 'books', 'customFacts', 'tasks', 'quizRuns'];
 const SET_BUCKETS = ['extraCategories', 'favorites'];
 
 /* ---------- utilidades ---------- */
@@ -55,6 +55,7 @@ export function flatten(state) {
   }
   for (const [d, v] of Object.entries(state.moods || {})) records[`moods/${d}`] = v;
   for (const [d, v] of Object.entries(state.reflections || {})) records[`reflections/${d}`] = v;
+  for (const [k, v] of Object.entries(state.quizStats || {})) records[`qs/${k}`] = v;
   for (const [d, entries] of Object.entries(state.habitEntries || {}))
     for (const [hid, v] of Object.entries(entries || {})) records[`he/${d}/${hid}`] = v;
   return { records, order };
@@ -76,9 +77,10 @@ export function buildState(base, records, remoteOrder = {}, localOrder = {}) {
   for (const k of Object.keys(records)) { const i = k.indexOf('/'); (by[k.slice(0, i)] ??= []).push(k); }
   for (const b of ID_BUCKETS) next[b] = orderKeys(by[b] || [], remoteOrder[b] || [], localOrder[b] || [], true).map(k => records[k]);
   for (const b of SET_BUCKETS) next[b] = orderKeys(by[b] || [], remoteOrder[b] || [], localOrder[b] || [], false).map(k => records[k]);
-  next.moods = {}; next.reflections = {}; next.habitEntries = {};
+  next.moods = {}; next.reflections = {}; next.habitEntries = {}; next.quizStats = {};
   for (const k of by.moods || []) next.moods[k.slice(6)] = records[k];
   for (const k of by.reflections || []) next.reflections[k.slice(12)] = records[k];
+  for (const k of by.qs || []) next.quizStats[k.slice(3)] = records[k];
   for (const k of by.he || []) {
     const rest = k.slice(3), j = rest.indexOf('/');
     (next.habitEntries[rest.slice(0, j)] ??= {})[rest.slice(j + 1)] = records[k];
@@ -140,7 +142,7 @@ export const fingerprint = p => hash(stable({ r: p.records, u: p.updated, d: p.d
 export function isFresh(state) {
   const empty = o => !o || !Object.keys(o).length;
   return empty(state.habitEntries) && empty(state.moods) && empty(state.reflections) &&
-    ['sessions', 'grades', 'extras', 'goals', 'books', 'tasks', 'favorites'].every(b => !(state[b] || []).length);
+    ['sessions', 'grades', 'extras', 'goals', 'books', 'tasks', 'quizRuns', 'favorites'].every(b => !(state[b] || []).length);
 }
 
 /* ---------- cifrado ---------- */
