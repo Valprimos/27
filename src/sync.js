@@ -10,7 +10,7 @@ const API = 'https://api.github.com';
 const ITER = 250000;
 const TOMBSTONE_DAYS = 400;
 
-const ID_BUCKETS = ['habits', 'areas', 'sessions', 'subjects', 'grades', 'extras', 'goals', 'books', 'customFacts', 'tasks', 'quizRuns'];
+const ID_BUCKETS = ['habits', 'areas', 'sessions', 'subjects', 'grades', 'extras', 'goals', 'books', 'customFacts', 'tasks', 'quizRuns', 'projects'];
 const SET_BUCKETS = ['extraCategories', 'favorites'];
 
 /* ---------- utilidades ---------- */
@@ -142,7 +142,7 @@ export const fingerprint = p => hash(stable({ r: p.records, u: p.updated, d: p.d
 export function isFresh(state) {
   const empty = o => !o || !Object.keys(o).length;
   return empty(state.habitEntries) && empty(state.moods) && empty(state.reflections) &&
-    ['sessions', 'grades', 'extras', 'goals', 'books', 'tasks', 'quizRuns', 'favorites'].every(b => !(state[b] || []).length);
+    ['sessions', 'grades', 'extras', 'goals', 'books', 'tasks', 'quizRuns', 'projects', 'favorites'].every(b => !(state[b] || []).length);
 }
 
 /* ---------- cifrado ---------- */
